@@ -13,7 +13,7 @@ pair<int, int> SmartBattleshipGameAlgo::attack()
 		m_attacksRemain.erase(m_attacksRemain.begin() + randomLocation-1); // liga!
 		return currentAttack;
 	}
-	//sink ship mode
+	//sink ship mode //TODO: finish
 	
 
 	return {};

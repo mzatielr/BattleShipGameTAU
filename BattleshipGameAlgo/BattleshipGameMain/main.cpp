@@ -273,7 +273,7 @@ int main(int argc, char* argv[])
 	// While not both of players ended their attacks - //TODO: make outsidebollean to set instead of attacks done
 	while (!AattacksDone || !BattacksDone)
 	{
-		pair<int, int> tempPair = GetNextPlayerAttack(playerIdToPlayNext, algoA, algoB);
+		pair<int, int> tempPair = GetNextPlayerAttack(playerIdToPlayNext, algoA, algoB); //TODO: move all func from main into GameBoardUtils
 
 		//aligned both axis -1 because main board starts from (0,0) //TODO: check if this implementation with -1 for each axis is ok
 		tempPair = { tempPair.first - 1,tempPair.second - 1 };
