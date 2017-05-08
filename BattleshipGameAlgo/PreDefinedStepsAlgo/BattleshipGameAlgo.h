@@ -1,7 +1,7 @@
 #pragma once
 
 #include "IBattleshipGameAlgo.h"
-#include "../Common/AttackReciever.h"
+#include "AttackReciever.h"
 
 //a logger instance to log all data. initialized at main
 //extern Logger AppLogger;

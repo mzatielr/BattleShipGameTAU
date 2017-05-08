@@ -4,7 +4,7 @@
 #include "BattleshipGameAlgo.h"
 #include <utility>
 #include "../Common/GameBoardUtils.h"
-#include "../Common/AttackReciever.h"
+#include "AttackReciever.h"
 
 
 PreDefinedBattleshipGameAlgo::PreDefinedBattleshipGameAlgo()

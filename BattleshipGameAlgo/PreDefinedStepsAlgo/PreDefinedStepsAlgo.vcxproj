@@ -151,9 +151,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AttackReciever.cpp" />
     <ClCompile Include="BattleshipGameAlgo.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AttackReciever.h" />
     <ClInclude Include="BattleshipGameAlgo.h" />
     <ClInclude Include="IBattleshipGameAlgo.h" />
   </ItemGroup>

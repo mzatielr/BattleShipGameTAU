@@ -18,6 +18,9 @@
     <ClCompile Include="BattleshipGameAlgo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AttackReciever.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BattleshipGameAlgo.h">
@@ -25,6 +28,9 @@
     </ClInclude>
     <ClInclude Include="IBattleshipGameAlgo.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackReciever.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -150,7 +150,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AttackReciever.h" />
     <ClInclude Include="Bonus.h" />
     <ClInclude Include="Contants.h" />
     <ClInclude Include="GameBoardUtils.h" />
@@ -158,7 +157,6 @@
     <ClInclude Include="IOLib.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AttackReciever.cpp" />
     <ClCompile Include="Bonus.cpp" />
     <ClCompile Include="GameBoardUtils.cpp" />
   </ItemGroup>
