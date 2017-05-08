@@ -53,3 +53,7 @@ BattleshipGameAlgo/BattleshipGameMain/x64/Release/BattleshipGameMain.log
 *.exp
 BattleshipGameAlgo/BattleshipGameAlgo.VC.db
 *.suo
+BattleshipGameAlgo/BattleshipGameMain/x64/Release/BattleshipGameMain.Build.CppClean.log
+BattleshipGameAlgo/NaiveAlgo/x64/Release/NaiveAlgo.Build.CppClean.log
+BattleshipGameAlgo/PreDefinedStepsAlgo/x64/Release/PreDefinedStepsAlgo.Build.CppClean.log
+BattleshipGameAlgo/SmartAlgo/x64/Release/SmartAlgo.Build.CppClean.log
