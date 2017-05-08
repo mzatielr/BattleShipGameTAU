@@ -37,3 +37,17 @@ BattleshipGameAlgo/.vs/BattleshipGameAlgo/v14/.suo
 *.opendb
 *.suo
 BattleshipGameAlgo/BattleshipGameAlgo.VC.db
+*.pdb
+*.ipdb
+*.iobj
+BattleshipGameAlgo/SmartAlgo/x64/Release/SmartAlgo.tlog/unsuccessfulbuild
+*.lastbuildstate
+*.tlog
+BattleshipGameAlgo/SmartAlgo/x64/Release/SmartAlgo.log
+BattleshipGameAlgo/PreDefinedStepsAlgo/x64/Release/PreDefinedStepsAlgo.log
+BattleshipGameAlgo/NaiveAlgo/x64/Release/NaiveAlgo.log
+BattleshipGameAlgo/Common/x64/Release/Common.log
+BattleshipGameAlgo/Common/x64/Release/Common.Build.CppClean.log
+BattleshipGameAlgo/BattleshipGameMain/x64/Release/BattleshipGameMain.log
+*.db
+*.exp
