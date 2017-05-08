@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include "Contants.h"
 
 using namespace std;
 
@@ -11,6 +12,9 @@ AttackReciever::AttackReciever(const string& attackPath) : path(attackPath)
 	_file.open(attackPath);
 }
 
+// Returns: 0 - Attck found
+//			1 - Invalid 
+//			-1 - Error
 int AttackReciever::ReadNextAttack(pair<int, int>& pair)
 {
 	string line;
@@ -62,6 +66,8 @@ int AttackReciever::ReadNextAttack(pair<int, int>& pair)
 	return 0;
 }
 
+// Return {-1,-1} EOF
+//			{-2,-2} Error
 pair<int, int> AttackReciever::GetNextLegalAttack()
 {
 	std::string attackRow, attackCol;
@@ -81,10 +87,10 @@ pair<int, int> AttackReciever::GetNextLegalAttack()
 
 		if (result == -1) // Failure during reading 
 		{
-			return{ -1, -1 };
+			return{ ErrorDuringGetAttackIndex, ErrorDuringGetAttackIndex };
 		}
 	}
-	return{ 0,0 };
+	return{ AttckDoneIndex, AttckDoneIndex };
 }
 
 int AttackReciever::ConvertStringToIntSafely(string& line, int& number) const

@@ -5,7 +5,7 @@
 #include "../Common/GameBoardUtils.h"
 
 /*
- * \brief 
+ * \brief Find next cell to attck 
  * \return (-1,-1) in case of EOF. (-2, -2) in case of any failure - should return values between 1-10 and not 0-9 (EX2 specification)
  */
 pair<int, int> NaiveBattleshipGameAlgo::attack()

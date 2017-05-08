@@ -16,8 +16,7 @@ class PreDefinedBattleshipGameAlgo : public IBattleshipGameAlgo
 public:
 	//defult constructor
 	PreDefinedBattleshipGameAlgo();
-	//Getters
-	bool AttacksDone() const;
+	
 	//IBattleshipGameAlgo	
 	void setBoard(int player,const char** board, int numRows, int numCols) override; // called once to notify player on his board
 	std::pair<int, int> attack() override; // ask player for his move
@@ -25,11 +24,20 @@ public:
 	~PreDefinedBattleshipGameAlgo();
 	bool init(const std::string& path) override;
 private:
+	// Number rows - set in SetBoard func
+	int m_NumRow;
+
+	// Number cols - set in SetBoard func
+	int m_NumCol;
+	
 	//My player number
 	int m_myPlayerNum;
+
 	//boolean value setting if i finished my attacks
 	bool m_attacksDone;
+	
 	//my board game
 	char** m_board; 
+	
 	AttackReciever* m_attackReceiver;
 };
