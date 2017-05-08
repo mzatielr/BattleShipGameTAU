@@ -4,7 +4,9 @@
 pair<int, int> SmartBattleshipGameAlgo::attack()
 {
 	pair<int, int> currentAttack;
-	srand(time(NULL));
+	
+	// Todo: Dix worning here
+	//srand(time(NULL));
 
 	if(m_randomMode)
 	{
@@ -32,7 +34,7 @@ void SmartBattleshipGameAlgo::setBoard(int player, const char** board, int numRo
 	{
 		for (int j = 0; j<COLS; j++)
 		{
-			m_cannotAttackBoard[i][j] = 'X'; //X means we can attack here. 'V' means not
+			m_cannotAttackBoard[i][j] = CanAttck; //X means we can attack here. 'V' means not
 		}
 	}
 	GameBoardUtils::CloneBoardToPlayer(board, m_myPlayerNum, m_board);
@@ -42,7 +44,7 @@ void SmartBattleshipGameAlgo::setBoard(int player, const char** board, int numRo
 	{
 		for (int j = 0; j<COLS; j++)
 		{
-			if(m_cannotAttackBoard[i][j] == 'X') //if we can attack at that spot
+			if(m_cannotAttackBoard[i][j] == CanAttck) //if we can attack at that spot
 			{
 				m_attacksRemain.push_back(pair<int, int>(i,j));
 			}

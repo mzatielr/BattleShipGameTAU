@@ -258,13 +258,13 @@ BoardFileErrorCode GameBoardUtils::ValidateGameBoard(char** board, int rows, int
 	return isNotLegalBoard ? BoardFileErrorCode::UnknownError : BoardFileErrorCode::Success;
 }
 
-void GameBoardUtils::InitBoard(char** board, int rows, int cols)
+void GameBoardUtils::InitBoard(char** board, int rows, int cols, char InitChar = BLANK)
 {
-	for (size_t i = 0; i < ROWS; i++)
+	for (size_t i = 0; i < rows; i++)
 	{
-		for (size_t j = 0; j < COLS; j++)
+		for (size_t j = 0; j < cols; j++)
 		{
-			board[i][j] = BLANK;
+			board[i][j] = InitChar;
 		}
 	}
 }
@@ -315,10 +315,13 @@ void GameBoardUtils::LoadLineToBoard(char** board, int row, int cols, const stri
 	}
 }
 
-char** GameBoardUtils::InitializeNewEmptyBoard() {
+char** GameBoardUtils::InitializeNewEmptyBoard()
+{
 	char** board = new char*[ROWS];
 	for (int i = 0; i < ROWS; ++i)
+	{
 		board[i] = new char[COLS];
+	}
 	return board;
 }
 
@@ -398,34 +401,37 @@ void GameBoardUtils::CloneBoard(char** full_board, char** player_board) {
 	}
 }
 
-void GameBoardUtils::MarkCannotAttack(char** markBoard, int playernum,char** mainBoard)
+void GameBoardUtils::MarkCannotAttack(char** markBoard, int playernum, char** mainBoard, int rows, int cols)
 {
-	for (int i = 0; i<ROWS; i++)
+	char cannotAttckChar = CannotAttck;
+
+	for (int i = 0; i < rows; i++)
 	{
-		for (int j = 0; j<COLS; j++)
+		for (int j = 0; j < cols; j++)
 		{
 			if (IsPlayerIdChar(playernum, mainBoard[i][j]))
 			{
-				markBoard[i][j] = 'V';
+				markBoard[i][j] = cannotAttckChar;
+
 				//mark left of me
-				if((j>0)&&(!IsPlayerIdChar(playernum,mainBoard[i][j-1])))
+				if ((j > 0) && (!IsPlayerIdChar(playernum, mainBoard[i][j - 1])))
 				{
-					markBoard[i][j-1] = 'V';
+					markBoard[i][j - 1] = cannotAttckChar;
 				}
 				//mark right of me
-				if ((j<COLS-1) && (!IsPlayerIdChar(playernum, mainBoard[i][j+1])))
+				if ((j < cols - 1) && (!IsPlayerIdChar(playernum, mainBoard[i][j + 1])))
 				{
-					markBoard[i][j+1] = 'V';
+					markBoard[i][j + 1] = cannotAttckChar;
 				}
 				//mark above me
-				if((i>0)&&(!IsPlayerIdChar(playernum,mainBoard[i-1][j])))
+				if ((i > 0) && (!IsPlayerIdChar(playernum, mainBoard[i - 1][j])))
 				{
-					markBoard[i-1][j] = 'V';
+					markBoard[i - 1][j] = cannotAttckChar;
 				}
 				//mark below me
-				if ((i<ROWS-1) && (!IsPlayerIdChar(playernum, mainBoard[i + 1][j])))
+				if ((i < rows - 1) && (!IsPlayerIdChar(playernum, mainBoard[i + 1][j])))
 				{
-					markBoard[i + 1][j] = 'V';
+					markBoard[i + 1][j] = cannotAttckChar;
 				}
 			}
 		}

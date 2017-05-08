@@ -12,7 +12,7 @@ using namespace std;
 class GameBoardUtils {
 	static BoardFileErrorCode ValidateGameBoard(char** board, int rows, int cols);
 public:
-	static void InitBoard(char** board, int rows, int cols);
+	static void InitBoard(char** board, int rows, int cols, char InitChar);
 	static bool IsPlayerIdChar(int playerID, char current);
 	static int GetCharPlayerId(char current);
 	static bool IsLegalBoradChar(char current);
@@ -23,7 +23,7 @@ public:
 	static void PrintBoard(ostream& stream, char** board, int rows, int cols);
 	static void CloneBoardToPlayer(const char** full_board, int playerID, char** player_board);
 	static void CloneBoard(char** full_board, char** player_board);
-	static void MarkCannotAttack(char** markBoard, int playernum, char** mainBoard);
+	static void MarkCannotAttack(char** markBoard, int playernum, char** mainBoard, int rows = ROWS, int cols = COLS);
 	static string GetFilePathBySuffix(int argc, string customPath, string filesuffix, bool direxists = true);
 	static bool DirExists(const std::string& dirName_in);
 	static char** ClonePlayerBoard(const char** fullBoard, int i);
