@@ -28,7 +28,6 @@ std::pair<int,int> PreDefinedBattleshipGameAlgo::attack()
 	if(attack.first == AttckDoneIndex || attack.first == ErrorDuringGetAttackIndex)
 	{
 		m_attacksDone = true;
-		m_attackReceiver->Dispose();
 	}
 	return attack;
 }
@@ -63,9 +62,7 @@ PreDefinedBattleshipGameAlgo::~PreDefinedBattleshipGameAlgo()
 bool PreDefinedBattleshipGameAlgo::init(const std::string& path)
 {
 	m_attackReceiver = new AttackReciever(path); //TODO: need to init the attack file here
-	
-	//Todo -  Change Return value - can be also false, after changing the above remark
-	return true;
+	return m_attackReceiver->Init();
 }
 
 

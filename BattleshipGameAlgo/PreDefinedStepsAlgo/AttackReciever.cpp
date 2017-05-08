@@ -9,26 +9,41 @@ using namespace std;
 
 AttackReciever::AttackReciever(const string& attackPath) : path(attackPath)
 {
-	_file.open(attackPath);
 }
+bool AttackReciever::Init()
+{
+	_file.open(path);
+
+	while (!_file.eof())
+	{
+		string line;
+		getline(_file, line);
+
+		// Error occured on reading and EOF didn't reach
+		if (!_file && !_file.eof())
+		{
+			std::cout << "Error: Read from file " << path << " failure!" << std::endl;
+			return false;
+		}
+
+		fileRowsQueue.push(line);
+	}
+
+	Dispose();
+	return true;
+}
+
 
 // Returns: 0 - Attck found
 //			1 - Invalid 
 //			-1 - Error
 int AttackReciever::ReadNextAttack(pair<int, int>& pair)
 {
-	string line;
-
 	// Read next line
-	getline(_file, line);
-	line.erase(remove(line.begin(), line.end(), '\r'), line.end());
+	string line = fileRowsQueue.front();
+	fileRowsQueue.pop();
 
-	// Error occured on reading and EOF didn't reach
-	if (!_file && !_file.eof())
-	{
-		std::cout << "Error: Read from file " << path << " failure!" << std::endl;
-		return -1;
-	}
+	line.erase(remove(line.begin(), line.end(), '\r'), line.end());
 
 	//Remove all spaces in line
 	line.erase(remove(line.begin(), line.end(), ' '), line.end());
@@ -72,7 +87,7 @@ pair<int, int> AttackReciever::GetNextLegalAttack()
 {
 	std::string attackRow, attackCol;
 
-	while (!_file.eof())
+	while (fileRowsQueue.size() > 0)
 	{
 		pair<int, int> attack;
 		int result = ReadNextAttack(attack);
@@ -108,13 +123,8 @@ int AttackReciever::ConvertStringToIntSafely(string& line, int& number) const
 
 void AttackReciever::Dispose()
 {
-	_file.close();
-}
-
-AttackReciever::~AttackReciever()
-{
-	if(_file.is_open())
+	if (_file.is_open())
 	{
-		Dispose();
+		_file.close();
 	}
 }
