@@ -57,3 +57,6 @@ BattleshipGameAlgo/BattleshipGameMain/x64/Release/BattleshipGameMain.Build.CppCl
 BattleshipGameAlgo/NaiveAlgo/x64/Release/NaiveAlgo.Build.CppClean.log
 BattleshipGameAlgo/PreDefinedStepsAlgo/x64/Release/PreDefinedStepsAlgo.Build.CppClean.log
 BattleshipGameAlgo/SmartAlgo/x64/Release/SmartAlgo.Build.CppClean.log
+*.idb
+*.log
+*.ilk
