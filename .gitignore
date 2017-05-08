@@ -51,3 +51,5 @@ BattleshipGameAlgo/Common/x64/Release/Common.Build.CppClean.log
 BattleshipGameAlgo/BattleshipGameMain/x64/Release/BattleshipGameMain.log
 *.db
 *.exp
+BattleshipGameAlgo/BattleshipGameAlgo.VC.db
+*.suo
