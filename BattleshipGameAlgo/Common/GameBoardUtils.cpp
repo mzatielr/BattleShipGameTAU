@@ -333,7 +333,6 @@ void GameBoardUtils::DeleteBoard(char** board) {
 
 BoardFileErrorCode GameBoardUtils::LoadBoardFromFile(char** board, int rows, int cols, const string& filePath) 
 {
-	BoardFileErrorCode errcode;
 	//set all board to blank
 	InitBoard(board, rows, cols);
 
@@ -353,7 +352,7 @@ BoardFileErrorCode GameBoardUtils::LoadBoardFromFile(char** board, int rows, int
 	// Clone current board, becaue ValidateGameBoard changed the board
 	char** cloneBoard = GameBoardUtils::InitializeNewEmptyBoard();
 	GameBoardUtils::CloneBoard(board, cloneBoard);
-	errcode = ValidateGameBoard(cloneBoard, ROWS, COLS);
+	BoardFileErrorCode errcode = ValidateGameBoard(cloneBoard, ROWS, COLS);
 
 	// Delete clone board
 	DeleteBoard(cloneBoard);

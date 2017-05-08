@@ -11,11 +11,10 @@ typedef IBattleshipGameAlgo *(*GetAlgorithmFuncType)();
 
 using namespace std;
 
-int LoadDllFilesByOrder(string dirPath, GetAlgorithmFuncType& playerA, GetAlgorithmFuncType& playerB, bool dirExists) {
-
+int LoadDllFilesByOrder(string dirPath, GetAlgorithmFuncType& playerA, GetAlgorithmFuncType& playerB, bool dirExists) 
+{
 	char currentdirectory[_MAX_PATH];
 	_fullpath(currentdirectory, ".\\", _MAX_PATH); // obtain current directory
-	HANDLE dir;
 
 	WIN32_FIND_DATAA fileData; //data struct for file
 	vector<HINSTANCE>::iterator itr;
@@ -25,8 +24,7 @@ int LoadDllFilesByOrder(string dirPath, GetAlgorithmFuncType& playerA, GetAlgori
 	vector<IBattleshipGameAlgo *>::iterator aitr;
 
 	// define function of the type we expect
-	
-	GetAlgorithmFuncType GetAlgorithmFunc;
+
 	vector<tuple<string, HINSTANCE, GetAlgorithmFuncType>> dll_vec; // vector of <Algo Name, dll handle, GetAlgorithm function ptr>
 	vector<tuple<string, HINSTANCE, GetAlgorithmFuncType>>::iterator vitr;
 	vector<string> algoNames;
@@ -34,11 +32,12 @@ int LoadDllFilesByOrder(string dirPath, GetAlgorithmFuncType& playerA, GetAlgori
 	// iterate over *.dll files in path
 	string s = "\\*.dll"; // only .dll endings
 
-	if (!dirExists) {
+	if (!dirExists) 
+	{
 		dirPath.assign(currentdirectory + (string)"Debug");
 	}
 
-	dir = FindFirstFileA((dirPath + s).c_str(), &fileData); 
+	HANDLE dir = FindFirstFileA((dirPath + s).c_str(), &fileData); 
 	if (dir != INVALID_HANDLE_VALUE) //check if the dir opened successfully
 	{
 		// test each file suffix and set variables as needed
@@ -57,7 +56,7 @@ int LoadDllFilesByOrder(string dirPath, GetAlgorithmFuncType& playerA, GetAlgori
 			}
 
 			// Get function pointer
-			GetAlgorithmFunc = (GetAlgorithmFuncType)GetProcAddress(hDll, "GetAlgorithm");
+			GetAlgorithmFuncType GetAlgorithmFunc = (GetAlgorithmFuncType)GetProcAddress(hDll, "GetAlgorithm");
 			if (!GetAlgorithmFunc)
 			{
 				cout << "could not load function GetAlgorithm()" << endl;
@@ -122,7 +121,6 @@ void PrintSinkCharRec(char** maingameboard, Bonus* b, int i, int j, int player)
 	PrintSinkCharRec(maingameboard, b, i + 1, j, player);
 }
 
-
 void SetPlayerBoards(char** board, IBattleshipGameAlgo*& playerA, IBattleshipGameAlgo*& playerB)
 {
 	char** playerAboard = GameBoardUtils::ClonePlayerBoard(const_cast<const char**>(board), PlayerAID);
@@ -163,22 +161,24 @@ bool IsPlayerWon(int currentPlayer, ShipDetailsBoard* detailsA, ShipDetailsBoard
 	return currentPlayer == PlayerAID ? detailsB->IsLoose() : detailsA->IsLoose();
 }
 
-
 int main(int argc, char* argv[]) 
 {
 	GetAlgorithmFuncType getPlayerAAlgo, getPlayerBAlgo;
 
 	bool dirExists = false; 
-	bool AattacksDone = false;
-	bool BattacksDone = false;
-	GameBoardUtils::InitLogger(MainLogger,"Battle.log");
-                   
+	GameBoardUtils::InitLogger(MainLogger, "Battle.log");
+	
+	// Configure Bonus start point and color
 	GameBoardUtils::ChangeFontSize();
 	BonusParams p; 
+
+	//Todo: Move all this if to function [Optional]
+	//Todo: Ozeri refacrtor and improve implementation - something better than "NS" [Optional]
 	string dirPath("NS");
 	
 	//aquiring arguments and checking if dir exists
-	if (argc > 1) {
+	if (argc > 1) 
+	{
 		for (int i = 1; i < argc; i++) 
 		{
 			string s = argv[i];
@@ -207,9 +207,10 @@ int main(int argc, char* argv[])
 	}
 
 	//TODO: add search in working directory in case less then 2 were found + not working on command line with spaces
-	if (LoadDllFilesByOrder(dirPath, getPlayerAAlgo, getPlayerBAlgo, dirExists)) {
+	if (LoadDllFilesByOrder(dirPath, getPlayerAAlgo, getPlayerBAlgo, dirExists))
+	{
 		cout << "Error loading dll files. exiting" << endl;
-		return -1; //TODO: release all and check is ok
+		return ErrorExitCode; //TODO: release all and check is ok
 	}
 
 	//get .sboard file path
@@ -217,7 +218,7 @@ int main(int argc, char* argv[])
 	if (mainboardpath == "ERR") {
 		cout << "ERROR occured while getting board path" << endl;
 		MainLogger.LoggerDispose();
-		return -1;
+		return ErrorExitCode;
 	}
 
 	// board - will save updated and full board of two players
@@ -227,27 +228,27 @@ int main(int argc, char* argv[])
 	{
 		GameBoardUtils::DeleteBoard(mainGameBoard);
 		MainLogger.LoggerDispose();
-		return -1;
+		return ErrorExitCode;
 	}
 	GameBoardUtils::PrintBoard(MainLogger.logFile, mainGameBoard, ROWS, COLS);
 
+	//Todo: Move all this to PreDefinedStepsAlgo - we should pass a folder name and not a specific file [Must]
 	//get attack files path
-	string Aattackpath, Battackpath;
-	Aattackpath = GameBoardUtils::GetFilePathBySuffix(argc, dirPath, ".attack-a", dirExists);
+	string Aattackpath = GameBoardUtils::GetFilePathBySuffix(argc, dirPath, ".attack-a", dirExists);
 	if (Aattackpath == "ERR") 
 	{
 		cout << "ERROR in retrieving attack file of player A" << endl;
 		GameBoardUtils::DeleteBoard(mainGameBoard);
 		MainLogger.LoggerDispose();
-		return -1;
+		return ErrorExitCode;
 	}
-	Battackpath = GameBoardUtils::GetFilePathBySuffix(argc, dirPath, ".attack-b", dirExists);
+	string Battackpath = GameBoardUtils::GetFilePathBySuffix(argc, dirPath, ".attack-b", dirExists);
 	if (Battackpath == "ERR") 
 	{
 		cout << "ERROR in retrieving attack file of player B" << endl;
 		GameBoardUtils::DeleteBoard(mainGameBoard);
 		MainLogger.LoggerDispose();
-		return -1;
+		return ErrorExitCode;
 	}
 
 	// Init players Instances
@@ -256,9 +257,10 @@ int main(int argc, char* argv[])
 
 	//setting player boards
 	SetPlayerBoards(mainGameBoard, algoA, algoB);
-	if (!(algoA->init(Aattackpath)) || !(algoB->init(Battackpath))) {
+	if (!algoA->init(Aattackpath) || !algoB->init(Battackpath)) 
+	{
 		cout << "ERROR: could not init attack files" << endl;
-		return EXIT_FAILURE; //TODO: release all dynamic allocations
+		return ErrorExitCode; //TODO: release all dynamic allocations
 	}
 
 	ShipDetailsBoard* playerAboardDetails = new ShipDetailsBoard(mainGameBoard, PlayerAID);
@@ -268,18 +270,21 @@ int main(int argc, char* argv[])
 
 	Bonus* bonus = new Bonus(!p.isQuiet, p.delayInMiliseconds);
 	bonus->Init(mainGameBoard, ROWS, COLS);
+	
 	//main game play
 
+	bool AattacksDone = false;
+	bool BattacksDone = false;
 	// While not both of players ended their attacks - //TODO: make outsidebollean to set instead of attacks done
 	while (!AattacksDone || !BattacksDone)
 	{
-		pair<int, int> tempPair = GetNextPlayerAttack(playerIdToPlayNext, algoA, algoB); //TODO: move all func from main into GameBoardUtils
+		pair<int, int> tempPair = GetNextPlayerAttack(playerIdToPlayNext, algoA, algoB); //TODO: move all func from main into GameBoardUtils [Optional]
 
 		//aligned both axis -1 because main board starts from (0,0) //TODO: check if this implementation with -1 for each axis is ok
 		tempPair = { tempPair.first - 1,tempPair.second - 1 };
 
 		//Error occurred 
-		if ((tempPair.first == -2) && (tempPair.second == -2))
+		if (tempPair.first == -2 && tempPair.second == -2)
 		{
 			GameBoardUtils::DeleteBoard(mainGameBoard);
 			delete playerAboardDetails;
