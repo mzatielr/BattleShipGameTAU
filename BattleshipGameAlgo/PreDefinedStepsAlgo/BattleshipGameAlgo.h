@@ -23,7 +23,7 @@ public:
 	std::pair<int, int> attack() override; // ask player for his move
 	void notifyOnAttackResult(int player, int row, int col, AttackResult result) override; // notify on last move result
 	~PreDefinedBattleshipGameAlgo();
-	bool init(const std::string& path);
+	bool init(const std::string& path) override;
 private:
 	//My player number
 	int m_myPlayerNum;

@@ -30,3 +30,10 @@
 *.sdf
 BattleshipGameAlgo/BattleshipGameAlgo.v12.suo
 *.opensdf
+*.suo
+*.db
+*.db
+BattleshipGameAlgo/.vs/BattleshipGameAlgo/v14/.suo
+*.opendb
+*.suo
+BattleshipGameAlgo/BattleshipGameAlgo.VC.db
