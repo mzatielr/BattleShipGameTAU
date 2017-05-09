@@ -228,7 +228,7 @@ int main(int argc, char* argv[])
 	if (LoadDllFilesByOrder(dirPath, getPlayerAAlgo, getPlayerBAlgo, dirExists))
 	{
 		cout << "Error loading dll files. exiting" << endl;
-		MainLogger.LoggerDispose();
+		FreeGlobalVariable();
 		return ErrorExitCode; //TODO: release all and check is ok
 	}
 
@@ -236,7 +236,7 @@ int main(int argc, char* argv[])
 	string mainboardpath = GameBoardUtils::GetFilePathBySuffix(argc, dirPath,".sboard",dirExists);
 	if (mainboardpath == "ERR") {
 		cout << "ERROR occured while getting board path" << endl;
-		MainLogger.LoggerDispose();
+		FreeGlobalVariable();
 		return ErrorExitCode;
 	}
 
@@ -246,7 +246,7 @@ int main(int argc, char* argv[])
 	if(GameBoardUtils::LoadBoardFromFile(mainGameBoard, ROWS, COLS, mainboardpath)!= BoardFileErrorCode::Success)
 	{
 		GameBoardUtils::DeleteBoard(mainGameBoard);
-		MainLogger.LoggerDispose();
+		FreeGlobalVariable();
 		return ErrorExitCode;
 	}
 	GameBoardUtils::PrintBoard(MainLogger.logFile, mainGameBoard, ROWS, COLS);
@@ -305,8 +305,9 @@ int main(int argc, char* argv[])
 		//Error occurred 
 		if (tempPair.first == ErrorDuringGetAttackIndex && tempPair.second == ErrorDuringGetAttackIndex)
 		{
+			delete bonus;
 			GameBoardUtils::DeleteBoard(mainGameBoard);
-			MainLogger.LoggerDispose();
+			FreeGlobalVariable();
 			return ErrorExitCode;
 		}
 		//end of attacks
