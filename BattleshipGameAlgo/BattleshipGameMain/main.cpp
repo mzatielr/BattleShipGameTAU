@@ -281,7 +281,7 @@ int main(int argc, char* argv[])
 		cout << "ERROR: could not init attack files" << endl;
 		GameBoardUtils::DeleteBoard(mainGameBoard);
 		FreeGlobalVariable();
-		return ErrorExitCode; //TODO: release all dynamic allocations
+		return ErrorExitCode;
 	}
 
 	ShipDetailsBoard playerAboardDetails(mainGameBoard, PlayerAID);
@@ -297,7 +297,7 @@ int main(int argc, char* argv[])
 	bool AattacksDone = false;
 	bool BattacksDone = false;
 
-	// While not both of players ended their attacks - //TODO: make outsidebollean to set instead of attacks done.
+	// While not both of players ended their attacks
 	while (!AattacksDone || !BattacksDone)
 	{
 		pair<int, int> tempPair = GetNextPlayerAttack(playerIdToPlayNext, algoA, algoB); //TODO: move all func from main into GameBoardUtils [Optional]
@@ -394,6 +394,5 @@ int main(int argc, char* argv[])
 
 	FreeGlobalVariable();
 	GameBoardUtils::DeleteBoard(mainGameBoard);
-
 	return 0;
 }
