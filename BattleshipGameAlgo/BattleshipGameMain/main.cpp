@@ -11,6 +11,19 @@ typedef IBattleshipGameAlgo *(*GetAlgorithmFuncType)();
 
 using namespace std;
 
+// Dll Loading global variables
+vector<tuple<string, HINSTANCE, GetAlgorithmFuncType>> dll_vec; // vector of <Algo Name, dll handle, GetAlgorithm function ptr>
+vector<tuple<string, HINSTANCE, GetAlgorithmFuncType>>::iterator vitr;
+
+void FreeLoadedResources ()
+{
+	// close all the dynamic libs we opened
+	for (vitr = dll_vec.begin(); vitr != dll_vec.end(); ++vitr)
+	{
+		FreeLibrary(get<1>(*vitr));
+	}
+}
+
 int LoadDllFilesByOrder(string dirPath, GetAlgorithmFuncType& playerA, GetAlgorithmFuncType& playerB, bool dirExists) 
 {
 	char currentdirectory[_MAX_PATH];
@@ -24,9 +37,6 @@ int LoadDllFilesByOrder(string dirPath, GetAlgorithmFuncType& playerA, GetAlgori
 	vector<IBattleshipGameAlgo *>::iterator aitr;
 
 	// define function of the type we expect
-
-	vector<tuple<string, HINSTANCE, GetAlgorithmFuncType>> dll_vec; // vector of <Algo Name, dll handle, GetAlgorithm function ptr>
-	vector<tuple<string, HINSTANCE, GetAlgorithmFuncType>>::iterator vitr;
 	vector<string> algoNames;
 
 	// iterate over *.dll files in path
@@ -95,11 +105,11 @@ int LoadDllFilesByOrder(string dirPath, GetAlgorithmFuncType& playerA, GetAlgori
 	return 0;
 }
 
-void PrintPoints(ShipDetailsBoard* playerA, ShipDetailsBoard* playerB)
+void PrintPoints(ShipDetailsBoard& playerA, ShipDetailsBoard& playerB)
 {
 	cout << "Points:" << endl;
-	cout << "Player A: " << playerB->negativeScore << endl;
-	cout << "Player B: " << playerA->negativeScore << endl;
+	cout << "Player A: " << playerB.negativeScore << endl;
+	cout << "Player B: " << playerA.negativeScore << endl;
 }
 
 void PrintSinkCharRec(char** maingameboard, Bonus* b, int i, int j, int player)
@@ -137,28 +147,36 @@ void SetPlayerBoards(char** board, IBattleshipGameAlgo*& playerA, IBattleshipGam
 	GameBoardUtils::DeleteBoard(playerBboard);
 }
 
-pair<int, int> GetNextPlayerAttack(int player_id,  IBattleshipGameAlgo* player_a, IBattleshipGameAlgo* player_b)
+pair<int, int> GetNextPlayerAttack(int player_id,  IBattleshipGameAlgo*  player_a, IBattleshipGameAlgo* player_b)
 {
 	if (player_id == PlayerAID)
 	{
 		return player_a->attack();
 	}
-	if (player_id == PlayerBID) {
+	if (player_id == PlayerBID) 
+	{
 		return player_b->attack();
 	}
 	// Fatal Error
 	MainLogger.logFile << "Fatal error occured. Attack move was asked for non exixting player id " << player_id << endl;
-	return{ -1,-1 };
+	return{ ErrorDuringGetAttackIndex,ErrorDuringGetAttackIndex };
 }
 
-AttackResult GetAttackResult(const pair<int, int>& pair, char** board, ShipDetailsBoard* detailsA, ShipDetailsBoard* detailsB)
+AttackResult GetAttackResult(const pair<int, int>& pair, char** board, ShipDetailsBoard& detailsA, ShipDetailsBoard& detailsB)
 {
-	return GameBoardUtils::IsPlayerIdChar(PlayerAID,board[pair.first][pair.second]) ? detailsA->GetAttackResult(pair) : detailsB->GetAttackResult(pair);
+	return GameBoardUtils::IsPlayerIdChar(PlayerAID,board[pair.first][pair.second]) ? detailsA.GetAttackResult(pair) : detailsB.GetAttackResult(pair);
 }
 
-bool IsPlayerWon(int currentPlayer, ShipDetailsBoard* detailsA, ShipDetailsBoard* detailsB)
+bool IsPlayerWon(int currentPlayer, ShipDetailsBoard& detailsA, ShipDetailsBoard& detailsB)
 {
-	return currentPlayer == PlayerAID ? detailsB->IsLoose() : detailsA->IsLoose();
+	return currentPlayer == PlayerAID ? detailsB.IsLoose() : detailsA.IsLoose();
+}
+
+// Free all global variables
+void FreeGlobalVariable()
+{
+	MainLogger.LoggerDispose();
+	FreeLoadedResources();
 }
 
 int main(int argc, char* argv[]) 
@@ -210,6 +228,7 @@ int main(int argc, char* argv[])
 	if (LoadDllFilesByOrder(dirPath, getPlayerAAlgo, getPlayerBAlgo, dirExists))
 	{
 		cout << "Error loading dll files. exiting" << endl;
+		MainLogger.LoggerDispose();
 		return ErrorExitCode; //TODO: release all and check is ok
 	}
 
@@ -239,7 +258,7 @@ int main(int argc, char* argv[])
 	{
 		cout << "ERROR in retrieving attack file of player A" << endl;
 		GameBoardUtils::DeleteBoard(mainGameBoard);
-		MainLogger.LoggerDispose();
+		FreeGlobalVariable();
 		return ErrorExitCode;
 	}
 	string Battackpath = GameBoardUtils::GetFilePathBySuffix(argc, dirPath, ".attack-b", dirExists);
@@ -247,7 +266,7 @@ int main(int argc, char* argv[])
 	{
 		cout << "ERROR in retrieving attack file of player B" << endl;
 		GameBoardUtils::DeleteBoard(mainGameBoard);
-		MainLogger.LoggerDispose();
+		FreeGlobalVariable();
 		return ErrorExitCode;
 	}
 
@@ -260,11 +279,13 @@ int main(int argc, char* argv[])
 	if (!algoA->init(Aattackpath) || !algoB->init(Battackpath)) 
 	{
 		cout << "ERROR: could not init attack files" << endl;
+		GameBoardUtils::DeleteBoard(mainGameBoard);
+		FreeGlobalVariable();
 		return ErrorExitCode; //TODO: release all dynamic allocations
 	}
 
-	ShipDetailsBoard* playerAboardDetails = new ShipDetailsBoard(mainGameBoard, PlayerAID);
-	ShipDetailsBoard* playerBboardDetails = new ShipDetailsBoard(mainGameBoard, PlayerBID);
+	ShipDetailsBoard playerAboardDetails(mainGameBoard, PlayerAID);
+	ShipDetailsBoard playerBboardDetails(mainGameBoard, PlayerBID);
 
 	int playerIdToPlayNext = PlayerAID;
 
@@ -275,29 +296,24 @@ int main(int argc, char* argv[])
 
 	bool AattacksDone = false;
 	bool BattacksDone = false;
-	// While not both of players ended their attacks - //TODO: make outsidebollean to set instead of attacks done
+
+	// While not both of players ended their attacks - //TODO: make outsidebollean to set instead of attacks done.
 	while (!AattacksDone || !BattacksDone)
 	{
 		pair<int, int> tempPair = GetNextPlayerAttack(playerIdToPlayNext, algoA, algoB); //TODO: move all func from main into GameBoardUtils [Optional]
 
-		//aligned both axis -1 because main board starts from (0,0) //TODO: check if this implementation with -1 for each axis is ok
-		tempPair = { tempPair.first - 1,tempPair.second - 1 };
-
 		//Error occurred 
-		if (tempPair.first == -2 && tempPair.second == -2)
+		if (tempPair.first == ErrorDuringGetAttackIndex && tempPair.second == ErrorDuringGetAttackIndex)
 		{
 			GameBoardUtils::DeleteBoard(mainGameBoard);
-			delete playerAboardDetails;
-			delete playerBboardDetails;
 			MainLogger.LoggerDispose();
-			return -1;
+			return ErrorExitCode;
 		}
 		//end of attacks
-		if ((tempPair.first == -1) && (tempPair.second == -1))
+		if ((tempPair.first == AttckDoneIndex) && (tempPair.second == AttckDoneIndex))
 		{
 			if(playerIdToPlayNext)
 			{
-				//cout << "AattacksDone!" << endl; //TODO: remove
 				AattacksDone = true;
 			}
 			else
@@ -309,6 +325,9 @@ int main(int argc, char* argv[])
 		}
 		else
 		{
+			//aligned both axis -1 because main board starts from (0,0)
+			tempPair = { tempPair.first - 1,tempPair.second - 1 };
+
 			char attckCell = mainGameBoard[tempPair.first][tempPair.second];
 			bool isSelfAttack = GameBoardUtils::IsPlayerIdChar(playerIdToPlayNext, attckCell);
 
@@ -348,35 +367,32 @@ int main(int argc, char* argv[])
 
 			if (IsPlayerWon(PlayerAID, playerAboardDetails, playerBboardDetails))
 			{
-				delete bonus;
+				delete bonus; // Important: Don't touch and don't change the order of statements [Mordehai]
 				cout << "Player A won" << endl;
 				PrintPoints(playerAboardDetails, playerBboardDetails);
 
 				GameBoardUtils::DeleteBoard(mainGameBoard);
-				delete playerAboardDetails;
-				delete playerBboardDetails;
+				FreeGlobalVariable();
 				return 0;
 			}
 			if (IsPlayerWon(PlayerBID, playerAboardDetails, playerBboardDetails))
 			{
-				delete bonus;
+				delete bonus; // Important: Don't touch and don't change the order of statements [Mordehai]
 				cout << "Player B won" << endl;
 				PrintPoints(playerAboardDetails, playerBboardDetails);
 
 				GameBoardUtils::DeleteBoard(mainGameBoard);
-				delete playerAboardDetails;
-				delete playerBboardDetails;
+				FreeGlobalVariable();
 				return 0;
 			}
 		}
 	}
 
-	delete bonus;
+	delete bonus; // Important: Don't touch and don't change the order of statements [Mordehai]
 	PrintPoints(playerAboardDetails, playerBboardDetails);
 
+	FreeGlobalVariable();
 	GameBoardUtils::DeleteBoard(mainGameBoard);
-	delete playerAboardDetails;
-	delete playerBboardDetails;	
-	MainLogger.LoggerDispose();
+
 	return 0;
 }
