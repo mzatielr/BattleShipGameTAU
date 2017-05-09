@@ -6,13 +6,15 @@ Logger BonusLogger;
 
 Bonus::Bonus(bool enable, int waitTimeout): enable(enable), waitInMiliseconds(waitTimeout), absX(0), absY(0)
 {
-	BonusLogger.InitLogger("Bonus.txt");
 }
 
 void Bonus::Init(char** board, int rows, int cols)
 {
 	if (!enable)
 		return;
+
+	BonusLogger.InitLogger("Bonus.txt");
+
 	StoreCurrentConsoleState();
 
 	for (int i = 0; i < rows; i++)
@@ -29,12 +31,12 @@ void Bonus::Init(char** board, int rows, int cols)
 	Wait();
 }
 
-void Bonus::Wait()
+void Bonus::Wait() const
 {
 	this_thread::sleep_for(std::chrono::milliseconds(waitInMiliseconds));
 }
 
-void* Bonus::GetstdOutHandle() 
+void* Bonus::GetstdOutHandle()
 {
 	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -71,7 +73,7 @@ RetVal Bonus::StoreCurrentConsoleState()
 	return RetVal::Success;
 }
 
-RetVal Bonus::gotoxy(int x, int y, bool isAbsVal)
+RetVal Bonus::gotoxy(int x, int y, bool isAbsVal) const
 {
 	COORD coord;
 	coord.X = isAbsVal ? x : absX + x;
@@ -92,7 +94,7 @@ RetVal Bonus::gotoxy(int x, int y, bool isAbsVal)
 	return RetVal::Success;
 }
 
-RetVal Bonus::SetTextColor(int playerID)
+RetVal Bonus::SetTextColor(int playerID) const
 {
 	WORD color;
 
@@ -119,7 +121,7 @@ RetVal Bonus::SetTextColor(int playerID)
 	return RetVal::Success;
 }
 
-RetVal Bonus::RestoreConsoleState()
+RetVal Bonus::RestoreConsoleState() const
 {
 	HANDLE hstdout = GetstdOutHandle();
 	if (hstdout == nullptr)
@@ -167,7 +169,7 @@ RetVal Bonus::StoreCurrentCoord()
 	return RetVal::Success;
 }
 
-void Bonus::PrintPlayerChar(char letter, short x, short y, int playerID, bool isWaitAfterPrint)
+void Bonus::PrintPlayerChar(char letter, short x, short y, int playerID, bool isWaitAfterPrint) const
 {
 	if (!enable)
 		return;
@@ -198,7 +200,7 @@ void Bonus::PrintPlayerChar(char letter, short x, short y, int playerID, bool is
 		Wait();
 }
 
-Bonus::~Bonus()
+void Bonus::Dispose() const
 {
 	if (!enable)
 		return;

@@ -112,7 +112,7 @@ void PrintPoints(ShipDetailsBoard& playerA, ShipDetailsBoard& playerB)
 	cout << "Player B: " << playerA.negativeScore << endl;
 }
 
-void PrintSinkCharRec(char** maingameboard, Bonus* b, int i, int j, int player)
+void PrintSinkCharRec(char** maingameboard, Bonus& b, int i, int j, int player)
 {
 	if (i < 0 || i >= ROWS || j < 0 || j >= COLS) // Stop recursion condition
 	{
@@ -124,7 +124,7 @@ void PrintSinkCharRec(char** maingameboard, Bonus* b, int i, int j, int player)
 		return;
 
 	maingameboard[i][j] = SINK_CHAR;
-	b->PrintPlayerChar(maingameboard[i][j], j, i, player);
+	b.PrintPlayerChar(maingameboard[i][j], j, i, player);
 	PrintSinkCharRec(maingameboard, b, i, j - 1, player);
 	PrintSinkCharRec(maingameboard, b, i, j + 1, player);
 	PrintSinkCharRec(maingameboard, b, i - 1, j, player);
@@ -289,8 +289,8 @@ int main(int argc, char* argv[])
 
 	int playerIdToPlayNext = PlayerAID;
 
-	Bonus* bonus = new Bonus(!p.isQuiet, p.delayInMiliseconds);
-	bonus->Init(mainGameBoard, ROWS, COLS);
+	Bonus bonus(!p.isQuiet, p.delayInMiliseconds);
+	bonus.Init(mainGameBoard, ROWS, COLS);
 	
 	//main game play
 
@@ -305,7 +305,7 @@ int main(int argc, char* argv[])
 		//Error occurred 
 		if (tempPair.first == ErrorDuringGetAttackIndex && tempPair.second == ErrorDuringGetAttackIndex)
 		{
-			delete bonus;
+			bonus.Dispose();
 			GameBoardUtils::DeleteBoard(mainGameBoard);
 			FreeGlobalVariable();
 			return ErrorExitCode;
@@ -357,7 +357,7 @@ int main(int argc, char* argv[])
 					PrintSinkCharRec(mainGameBoard,bonus, tempPair.first, tempPair.second, playerTosetColor);
 				}
 				else // In case hit update only the target cell
-					bonus->PrintPlayerChar(mainGameBoard[tempPair.first][tempPair.second], tempPair.second, tempPair.first, playerTosetColor);
+					bonus.PrintPlayerChar(mainGameBoard[tempPair.first][tempPair.second], tempPair.second, tempPair.first, playerTosetColor);
 			}
 
 			if (tempattackresult == AttackResult::Miss || isSelfAttack)
@@ -368,7 +368,7 @@ int main(int argc, char* argv[])
 
 			if (IsPlayerWon(PlayerAID, playerAboardDetails, playerBboardDetails))
 			{
-				delete bonus; // Important: Don't touch and don't change the order of statements [Mordehai]
+				bonus.Dispose(); // Important: Don't touch and don't change the order of statements [Mordehai]
 				cout << "Player A won" << endl;
 				PrintPoints(playerAboardDetails, playerBboardDetails);
 
@@ -378,7 +378,7 @@ int main(int argc, char* argv[])
 			}
 			if (IsPlayerWon(PlayerBID, playerAboardDetails, playerBboardDetails))
 			{
-				delete bonus; // Important: Don't touch and don't change the order of statements [Mordehai]
+				bonus.Dispose(); // Important: Don't touch and don't change the order of statements [Mordehai]
 				cout << "Player B won" << endl;
 				PrintPoints(playerAboardDetails, playerBboardDetails);
 
@@ -389,7 +389,7 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	delete bonus; // Important: Don't touch and don't change the order of statements [Mordehai]
+	bonus.Dispose(); // Important: Don't touch and don't change the order of statements [Mordehai]
 	PrintPoints(playerAboardDetails, playerBboardDetails);
 
 	FreeGlobalVariable();

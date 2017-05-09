@@ -23,18 +23,18 @@ class Bonus
 	int absX;
 	int absY;
 
-	void Wait();
-	void* GetstdOutHandle();
+	void Wait() const;
+	static void* GetstdOutHandle();
 	RetVal StoreCurrentConsoleState();
-	RetVal gotoxy(int x, int y, bool isAbsVal = false);
-	RetVal SetTextColor(int playerID);
-	RetVal RestoreConsoleState();
+	RetVal gotoxy(int x, int y, bool isAbsVal = false) const;
+	RetVal SetTextColor(int playerID) const;
+	RetVal RestoreConsoleState() const;
 	RetVal StoreCurrentCoord();
 
 public:	
 	Bonus(bool enable, int waitTimeout = 1500);
 
 	void Init(char** board, int rows, int cols);
-	void PrintPlayerChar(char letter, short x, short y, int playerID, bool isWaitAfterPrint = true);
-	~Bonus();
+	void PrintPlayerChar(char letter, short x, short y, int playerID, bool isWaitAfterPrint = true) const;
+	void Dispose() const;
 };
