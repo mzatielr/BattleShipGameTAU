@@ -17,13 +17,25 @@ public:
 	~SmartBattleshipGameAlgo();
 	bool init(const std::string& path) override;
 private:
+	// Number rows - set in SetBoard func
+	int m_NumRow;
+
+	// Number cols - set in SetBoard func
+	int m_NumCol;
+	
 	int m_randomMode = 1;
+	
 	//My player number
 	int m_myPlayerNum;
+	
 	//my board game
 	char** m_board;
+	
 	//a board for marking where cant we attack
 	char** m_cannotAttackBoard;
+	
 	//function for generating a random attack
 	vector<pair<int, int>> m_attacksRemain;
+
+	static int GetRandom(size_t maxNumber);
 };

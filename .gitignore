@@ -61,3 +61,4 @@ BattleshipGameAlgo/SmartAlgo/x64/Release/SmartAlgo.Build.CppClean.log
 *.log
 *.ilk
 *.cache
+*.user
