@@ -3,15 +3,13 @@
 
 pair<int, int> SmartBattleshipGameAlgo::attack()
 {
-	pair<int, int> currentAttack;
-	
 	// Todo: Dix worning here
 	//srand(time(NULL));
 
 	if(m_randomMode)
 	{
 		int randomLocation = rand() % m_attacksRemain.size();
-		currentAttack = m_attacksRemain[randomLocation];
+		pair<int, int> currentAttack = m_attacksRemain[randomLocation];
 		m_attacksRemain.erase(m_attacksRemain.begin() + randomLocation-1); // liga!
 		return currentAttack;
 	}
