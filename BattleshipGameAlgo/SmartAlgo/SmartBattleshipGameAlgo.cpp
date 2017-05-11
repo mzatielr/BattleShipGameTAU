@@ -18,6 +18,41 @@ pair<int, int> SmartBattleshipGameAlgo::attack()
 	return pair<int, int>{AttckDoneIndex, AttckDoneIndex};
 }
 
+void SmartBattleshipGameAlgo::AddSqureCellsToQueue(int row, int col)
+{
+	// Add above me cell
+	if(row > 0)
+	{
+		AddPotentialAttckIfLegal(row - 1, col, AttackDir::Vertical);
+	}
+
+	// Add below me cell
+	if(row  < m_NumRow -1)
+	{
+		AddPotentialAttckIfLegal(row + 1, col, AttackDir::Vertical);
+	}
+
+	// Add left cell
+	if(col > 0)
+	{
+		AddPotentialAttckIfLegal(row, col - 1, AttackDir::Horizontal);
+	}
+
+	// Add right cell
+	if(col < m_NumCol -1 )
+	{
+		AddPotentialAttckIfLegal(row, col + 1, AttackDir::Horizontal);
+	}
+}
+
+void SmartBattleshipGameAlgo::AddPotentialAttckIfLegal(int row, int col, AttackDir dir)
+{
+	if(IsAttackValid(row, col))
+	{
+		m_PotentialAttacks.push_back(make_tuple(row, col, dir));
+	}
+}
+
 void SmartBattleshipGameAlgo::HandleMyRandomMode(int row, int col, AttackResult result)
 {
 	switch (result)
@@ -27,8 +62,18 @@ void SmartBattleshipGameAlgo::HandleMyRandomMode(int row, int col, AttackResult 
 		StartRandomAttackMode(); 
 		break;
 	case AttackResult::Hit:
+		// Switch to Target mode
+		m_mode = AttackMode::TargetMode;
+
+		// On first hit battleship direcion in unknown
+		m_CurrentDir = AttackDir::Unknown;
+
+		// Add all around legal cell to queue
+		AddSqureCellsToQueue(row, col);
 		break;
 	case AttackResult::Sink:
+		// Continue as random mode
+		StartRandomAttackMode();
 		break;
 	}
 }
@@ -52,6 +97,44 @@ void SmartBattleshipGameAlgo::HandleMyAttackResult(int row, int col, AttackResul
 
 void SmartBattleshipGameAlgo::HandleRivalAttackResult(int row, int col, AttackResult result)
 {
+
+}
+
+void SmartBattleshipGameAlgo::MarkInvalidCell(int row, int col, AttackResult result) const
+{
+	char markValue = m_cannotAttackBoard[row][col];
+	switch (result)
+	{
+	case AttackResult::Miss:
+		markValue = CannotAttck;
+		break;
+	case AttackResult::Hit:
+		markValue = CannotAttackShip;
+		break;
+	case AttackResult::Sink:
+		markValue = CannotAttackShip;
+		MarkSinkBattleAroundAsInvlid(row, col);
+		break;
+	}
+
+	m_cannotAttackBoard[row][col] = markValue;
+}
+
+void SmartBattleshipGameAlgo::MarkSinkBattleAroundAsInvlid(int row, int col) const
+{
+	if (row < 0 || row >= m_NumRow || col < 0 || col >= m_NumCol)
+		return;
+
+	char curCell = m_cannotAttackBoard[row][col];
+	m_cannotAttackBoard[row][col] = CannotAttck;
+
+	if (curCell == CannotAttackShip)
+	{
+		MarkSinkBattleAroundAsInvlid(row - 1, col);
+		MarkSinkBattleAroundAsInvlid(row + 1, col);
+		MarkSinkBattleAroundAsInvlid(row, col - 1);
+		MarkSinkBattleAroundAsInvlid(row, col + 1);
+	}
 }
 
 /*
@@ -86,6 +169,8 @@ void SmartBattleshipGameAlgo::setBoard(int player, const char** board, int numRo
 
 void SmartBattleshipGameAlgo::notifyOnAttackResult(int player, int row, int col, AttackResult result)
 {
+	MarkInvalidCell(row, col, result);
+
 	if(player == m_myPlayerNum)
 	{
 		HandleMyAttackResult(row, col, result);
@@ -121,6 +206,12 @@ void SmartBattleshipGameAlgo::StartRandomAttackMode()
 
 	// Empty potentail attack collection
 	m_PotentialAttacks.clear();
+}
+
+bool SmartBattleshipGameAlgo::IsAttackValid(int row, int col) const
+{
+	char value = m_cannotAttackBoard[row][col];
+	return value != CannotAttck && value != CannotAttackShip;
 }
 
 /**

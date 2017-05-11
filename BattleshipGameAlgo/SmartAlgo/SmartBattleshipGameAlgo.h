@@ -17,10 +17,14 @@ public:
 	//IBattleshipGameAlgo	
 	void setBoard(int player, const char** board, int numRows, int numCols) override; // called once to notify player on his board
 	pair<int, int> attack() override; // ask player for his move
+	void AddSqureCellsToQueue(int row, int col);
+	void AddPotentialAttckIfLegal(int row, int col, AttackDir dir);
 	void HandleMyRandomMode(int row, int col, AttackResult result);
 	void HandleMyTargetMode(int row, int col, AttackResult result);
 	void HandleMyAttackResult(int row, int col, AttackResult result);
 	void HandleRivalAttackResult(int row, int col, AttackResult result);
+	void MarkInvalidCell(int row, int col, AttackResult result) const;
+	void MarkSinkBattleAroundAsInvlid(int row, int col) const;
 	void notifyOnAttackResult(int player, int row, int col, AttackResult result) override; // notify on last move result
 	~SmartBattleshipGameAlgo();
 	bool init(const std::string& path) override;
@@ -49,10 +53,12 @@ private:
 	//Holds the valid attack for generating a random attack
 	vector<pair<int, int>> m_attacksRemain;
 
-	// Holds potential attacks after mode is Target
+	// Holds potential attacks after mode is Target <row,col,dir(Vertical/Horizontal)>
 	vector<tuple<int, int, AttackDir>> m_PotentialAttacks;
 
 	static int GetRandom(size_t maxNumber);
 
 	void StartRandomAttackMode();
+
+	bool IsAttackValid(int row, int col) const;
 };

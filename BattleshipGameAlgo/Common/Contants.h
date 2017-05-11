@@ -23,6 +23,9 @@
 #define CanAttck 'Y'
 #define CannotAttck 'N'
 
+// [Used for SmartAlgo] S meaning that we cannot attack here because ship was here
+#define CannotAttackShip 'S'
+
 enum class BoardFileErrorCode {Success, UnknownError};
 
 // Exit code result in case of any failure. Should be used only in Main function
