@@ -1,6 +1,7 @@
 #include "SmartBattleshipGameAlgo.h"
 #include "../Common/GameBoardUtils.h"
 #include "../Common/Contants.h"
+#include <cassert>
 
 pair<int, int> SmartBattleshipGameAlgo::attack()
 {
@@ -15,6 +16,42 @@ pair<int, int> SmartBattleshipGameAlgo::attack()
 
 
 	return pair<int, int>{AttckDoneIndex, AttckDoneIndex};
+}
+
+void SmartBattleshipGameAlgo::HandleMyRandomMode(int row, int col, AttackResult result)
+{
+	switch (result)
+	{
+	case AttackResult::Miss:
+		// Continue as random mode
+		StartRandomAttackMode(); 
+		break;
+	case AttackResult::Hit:
+		break;
+	case AttackResult::Sink:
+		break;
+	}
+}
+
+void SmartBattleshipGameAlgo::HandleMyTargetMode(int row, int col, AttackResult result)
+{
+}
+
+void SmartBattleshipGameAlgo::HandleMyAttackResult(int row, int col, AttackResult result)
+{
+	switch (m_mode)
+	{
+	case AttackMode::RandomMode:
+		HandleMyRandomMode(row, col, result);
+		break;
+	case AttackMode::TargetMode:
+		HandleMyTargetMode(row, col, result);
+		break;
+	}
+}
+
+void SmartBattleshipGameAlgo::HandleRivalAttackResult(int row, int col, AttackResult result)
+{
 }
 
 /*
@@ -49,31 +86,13 @@ void SmartBattleshipGameAlgo::setBoard(int player, const char** board, int numRo
 
 void SmartBattleshipGameAlgo::notifyOnAttackResult(int player, int row, int col, AttackResult result)
 {
-	if(m_myPlayerNum == player)
+	if(player == m_myPlayerNum)
 	{
-		if (m_mode == AttackMode::RandomMode)
-		{
-			if(result == AttackResult::Hit)
-			{
-				m_mode = AttackMode::RandomMode;
-			}
-			//else - sink || Miss - stay random
-			else
-			{
-				
-			}
-		}
-		else
-		{
-			if(result == AttackResult::Hit)
-			{
-				
-			}
-		}
+		HandleMyAttackResult(row, col, result);
 	}
 	else
 	{
-		
+		HandleRivalAttackResult(row, col, result);
 	}
 }
 
@@ -93,6 +112,15 @@ bool SmartBattleshipGameAlgo::init(const string& path)
 int SmartBattleshipGameAlgo::GetRandom(size_t maxNumber)
 {
 	return rand() % maxNumber;
+}
+
+void SmartBattleshipGameAlgo::StartRandomAttackMode()
+{
+	m_mode = AttackMode::RandomMode;
+	m_CurrentDir = AttackDir::Unknown;
+
+	// Empty potentail attack collection
+	m_PotentialAttacks.clear();
 }
 
 /**
