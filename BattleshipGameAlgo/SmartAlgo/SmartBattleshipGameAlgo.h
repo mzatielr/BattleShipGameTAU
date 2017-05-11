@@ -3,6 +3,10 @@
 #include <vector>
 
 using namespace std;
+
+enum class AttackMode {RandomMode , TargetMode };
+enum class AttackDir {Vertical, Horizontal, Unknown};
+
 /*
 * a class that represents a player at the game
 * holds the current information of the player while playing the game
@@ -23,8 +27,12 @@ private:
 	// Number cols - set in SetBoard func
 	int m_NumCol;
 	
-	int m_randomMode = 1;
-	
+	// Attack Mode
+	AttackMode m_mode;
+
+	// Current Direction attack
+	AttackDir m_CurrentDir;
+
 	//My player number
 	int m_myPlayerNum;
 	
@@ -34,8 +42,11 @@ private:
 	//a board for marking where cant we attack
 	char** m_cannotAttackBoard;
 	
-	//function for generating a random attack
+	//Holds the valid attack for generating a random attack
 	vector<pair<int, int>> m_attacksRemain;
+
+	// Holds potential attacks after mode is Target
+	vector<tuple<int, int, AttackDir>> m_PotentialAttacks;
 
 	static int GetRandom(size_t maxNumber);
 };

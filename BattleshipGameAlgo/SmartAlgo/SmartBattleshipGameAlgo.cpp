@@ -4,15 +4,15 @@
 
 pair<int, int> SmartBattleshipGameAlgo::attack()
 {
-	if(m_randomMode)
+	if (m_mode == AttackMode::RandomMode)
 	{
 		int randomLocation = GetRandom(m_attacksRemain.size());
 		pair<int, int> currentAttack = m_attacksRemain[randomLocation];
-		m_attacksRemain.erase(m_attacksRemain.begin() + randomLocation-1); // liga!
+
+		m_attacksRemain.erase(m_attacksRemain.begin() + randomLocation);
 		return currentAttack;
 	}
-	//sink ship mode //TODO: finish
-	
+
 
 	return pair<int, int>{AttckDoneIndex, AttckDoneIndex};
 }
@@ -24,28 +24,24 @@ void SmartBattleshipGameAlgo::setBoard(int player, const char** board, int numRo
 {
 	m_NumRow = numRows;
 	m_NumCol = numCols;
-	m_attacksRemain.size();
 	m_myPlayerNum = player;
+	m_mode = AttackMode::RandomMode; // Starting from random mode
 
-	m_board = GameBoardUtils::InitializeNewEmptyBoard();
 	m_cannotAttackBoard = GameBoardUtils::InitializeNewEmptyBoard();
-	for (int i = 0; i<m_NumRow; i++)
-	{
-		for (int j = 0; j<m_NumCol; j++)
-		{
-			m_cannotAttackBoard[i][j] = CanAttck; //X means we can attack here. 'V' means not
-		}
-	}
+	GameBoardUtils::InitBoard(m_cannotAttackBoard, numRows, numCols, CanAttck);
+	
+	m_board = GameBoardUtils::InitializeNewEmptyBoard();
 	GameBoardUtils::CloneBoardToPlayer(board, m_myPlayerNum, m_board);
+
 	//prepering a matrix to know where not to attack
 	GameBoardUtils::MarkCannotAttack(m_cannotAttackBoard, m_myPlayerNum, m_board);
-	for (int i = 0; i<m_NumRow; i++)
+	for (int i = 0; i < m_NumRow; i++)
 	{
-		for (int j = 0; j<m_NumCol; j++)
+		for (int j = 0; j < m_NumCol; j++)
 		{
-			if(m_cannotAttackBoard[i][j] == CanAttck) //if we can attack at that spot
+			if (m_cannotAttackBoard[i][j] == CanAttck) //if we can attack at that spot
 			{
-				m_attacksRemain.push_back(pair<int, int>(i,j));
+				m_attacksRemain.push_back(pair<int, int>(i, j));
 			}
 		}
 	}
@@ -55,16 +51,16 @@ void SmartBattleshipGameAlgo::notifyOnAttackResult(int player, int row, int col,
 {
 	if(m_myPlayerNum == player)
 	{
-		if (m_randomMode)
+		if (m_mode == AttackMode::RandomMode)
 		{
 			if(result == AttackResult::Hit)
 			{
-				m_randomMode = 0;
+				m_mode = AttackMode::RandomMode;
 			}
 			//else - sink || Miss - stay random
 			else
 			{
-				m_randomMode = 1;
+				
 			}
 		}
 		else
