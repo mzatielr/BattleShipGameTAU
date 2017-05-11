@@ -1,6 +1,7 @@
 #pragma once
 #include "IBattleshipGameAlgo.h"
 #include <vector>
+#include <tuple>
 
 using namespace std;
 
@@ -20,9 +21,11 @@ public:
 	void AddSqureCellsToQueue(int row, int col);
 	void AddPotentialAttckIfLegal(int row, int col, AttackDir dir);
 	void HandleMyRandomMode(int row, int col, AttackResult result);
+	tuple<int, int, AttackDir> Dequeue(int row, int col);
+	void AddToQueueAfterHit(int row, int col);
 	void HandleMyTargetMode(int row, int col, AttackResult result);
 	void HandleMyAttackResult(int row, int col, AttackResult result);
-	void HandleRivalAttackResult(int row, int col, AttackResult result);
+	void HandleRivalAttackResult(int row, int col, AttackResult result) const;
 	void MarkInvalidCell(int row, int col, AttackResult result) const;
 	void MarkSinkBattleAroundAsInvlid(int row, int col) const;
 	void notifyOnAttackResult(int player, int row, int col, AttackResult result) override; // notify on last move result
