@@ -18,6 +18,8 @@ public:
 	//IBattleshipGameAlgo	
 	void setBoard(int player, const char** board, int numRows, int numCols) override; // called once to notify player on his board
 	pair<int, int> attack() override; // ask player for his move
+	pair<int, int> GetValidRandomAttack();
+	pair<int, int> GetValidOptionalAttack();
 	void AddSqureCellsToQueue(int row, int col);
 	void AddPotentialAttckIfLegal(int row, int col, AttackDir dir);
 	void HandleMyRandomMode(int row, int col, AttackResult result);

@@ -7,15 +7,65 @@ pair<int, int> SmartBattleshipGameAlgo::attack()
 {
 	if (m_mode == AttackMode::RandomMode)
 	{
+		return GetValidRandomAttack();
+	}
+	
+	// Target Mode
+	pair<int, int> attackPair = GetValidOptionalAttack();
+	if(attackPair.first == AttckDoneIndex)
+	{
+		// Return to random state
+		StartRandomAttackMode();
+		return GetValidRandomAttack();
+	}
+
+	return attackPair;
+}
+
+pair<int,int> SmartBattleshipGameAlgo::GetValidRandomAttack ()
+{
+	while (m_attacksRemain.size() > 0)
+	{
 		int randomLocation = GetRandom(m_attacksRemain.size());
 		pair<int, int> currentAttack = m_attacksRemain[randomLocation];
 
-		m_attacksRemain.erase(m_attacksRemain.begin() + randomLocation);
-		return currentAttack;
+		if (!IsAttackValid(currentAttack.first, currentAttack.second))
+		{
+			m_attacksRemain.erase(m_attacksRemain.begin() + randomLocation);
+		}
+		else
+		{
+			return currentAttack;
+		}
 	}
+	return{ AttckDoneIndex, AttckDoneIndex };
+}
 
+pair<int, int> SmartBattleshipGameAlgo::GetValidOptionalAttack()
+{
+	bool isCheckDir = m_CurrentDir != AttackDir::Unknown;
 
-	return pair<int, int>{AttckDoneIndex, AttckDoneIndex};
+	while (m_PotentialAttacks.size() > 0)
+	{
+		int randomLocation = GetRandom(m_PotentialAttacks.size());
+		tuple<int, int, AttackDir> currentAttack = m_PotentialAttacks[randomLocation];
+
+		if (!IsAttackValid(get<0>(currentAttack), get<1>(currentAttack)))
+		{
+			m_PotentialAttacks.erase(m_PotentialAttacks.begin() + randomLocation);
+		}
+
+		else if (isCheckDir && get<2>(currentAttack) != m_CurrentDir)
+		{
+			m_PotentialAttacks.erase(m_PotentialAttacks.begin() + randomLocation);
+		}
+
+		else
+		{
+			return { get<0>(currentAttack) , get<1>(currentAttack) };
+		}
+	}
+	return{ AttckDoneIndex, AttckDoneIndex };
 }
 
 void SmartBattleshipGameAlgo::AddSqureCellsToQueue(int row, int col)
