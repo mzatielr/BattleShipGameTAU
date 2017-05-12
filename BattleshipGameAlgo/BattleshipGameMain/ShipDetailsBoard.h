@@ -2,6 +2,8 @@
 #include "../Common/GameBoardUtils.h"
 #include "IBattleshipGameAlgo.h"
 
+enum class Direction { Right, Left, Up, Down, All };
+
 /*
 * a utility class for keeping track of game state
 */
@@ -21,4 +23,5 @@ public:
 	ShipDetailsBoard(char** board, int playerID);
 	AttackResult GetAttackResult(pair<int, int> attack);
 	bool IsLoose() const;
-};
+	bool IsSinkRecursiveChecker(int row, int col, Direction dir = Direction::All) const;
+ n};

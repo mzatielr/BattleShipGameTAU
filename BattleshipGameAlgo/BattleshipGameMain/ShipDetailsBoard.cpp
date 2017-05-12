@@ -43,26 +43,23 @@ AttackResult ShipDetailsBoard::GetAttackResult(pair<int, int> attack)
 	if (_utils.IsPlayerIdChar(playerID, cell))
 	{
 		mainboard[attack.first][attack.second] = HIT_CHAR;
+		result = IsSinkRecursiveChecker(attack.first, attack.second) ? AttackResult::Sink : AttackResult::Hit;
 		switch (tolower(cell))
 		{
 		case 'b':
 			RubberBoatCells--;
-			result = RubberBoatCells % RubberBoatW == 0 ? AttackResult::Sink : AttackResult::Hit;
 			negativeScore += result == AttackResult::Sink ? RubberBoatPoints : 0;
 			break;
 		case 'p':
 			RocketShipCells--;
-			result = RocketShipCells % RocketShipW == 0 ? AttackResult::Sink : AttackResult::Hit;
 			negativeScore += result == AttackResult::Sink ? RocketShipPoints : 0;
 			break;
 		case 'm':
 			SubmarineCells--;
-			result = SubmarineCells % SubmarineW == 0 ? AttackResult::Sink : AttackResult::Hit;
 			negativeScore += result == AttackResult::Sink ? SubmarinePoints : 0;
 			break;
 		case 'd':
 			DestroyeCells--;
-			result = DestroyeCells % DestroyerW == 0 ? AttackResult::Sink : AttackResult::Hit;
 			negativeScore += result == AttackResult::Sink ? DestroyerPoints : 0;
 			break;
 		default:
@@ -78,4 +75,43 @@ bool ShipDetailsBoard::IsLoose() const
 {
 	int sum = RubberBoatCells + RocketShipCells + SubmarineCells + DestroyeCells;
 	return (sum == 0);
+}
+
+bool ShipDetailsBoard::IsSinkRecursiveChecker(int row, int col, Direction dir) const
+{
+	if (row < 0 || row >= ROWS || col < 0 || col >= COLS)
+	{
+		return  true;
+	}
+	char cell = mainboard[row][col];
+	if (cell == BLANK)
+	{
+		return true;
+	}
+
+	if (cell != SINK_CHAR && cell != HIT_CHAR)
+	{
+		return false;
+	}
+
+	switch (dir)
+	{
+	case Direction::Right:
+		return IsSinkRecursiveChecker(row, col + 1, Direction::Right);
+		break;
+	case Direction::Left:
+		return IsSinkRecursiveChecker(row, col - 1, Direction::Left);
+		break;
+	case Direction::Up:
+		return IsSinkRecursiveChecker(row - 1, col, Direction::Up);
+		break;
+	case Direction::Down:
+		return IsSinkRecursiveChecker(row + 1, col, Direction::Down);
+		break;
+	case Direction::All:
+		return IsSinkRecursiveChecker(row, col + 1, Direction::Right) && IsSinkRecursiveChecker(row, col - 1, Direction::Left) &&
+			IsSinkRecursiveChecker(row - 1, col, Direction::Up) && IsSinkRecursiveChecker(row + 1, col, Direction::Down);
+		break;
+	}
+	return  true;
 }
