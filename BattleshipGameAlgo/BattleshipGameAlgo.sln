@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PreDefinedStepsAlgo", "PreD
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SmartAlgo", "SmartAlgo\SmartAlgo.vcxproj", "{F18913A8-8353-4A98-AAB8-C7C0D6A1FD8F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DummyAlgo", "DummyAlgo\DummyAlgo.vcxproj", "{1062D147-8462-4C66-8DEE-4B7F60E9F3FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -61,6 +63,14 @@ Global
 		{F18913A8-8353-4A98-AAB8-C7C0D6A1FD8F}.Release|x64.Build.0 = Release|x64
 		{F18913A8-8353-4A98-AAB8-C7C0D6A1FD8F}.Release|x86.ActiveCfg = Release|Win32
 		{F18913A8-8353-4A98-AAB8-C7C0D6A1FD8F}.Release|x86.Build.0 = Release|Win32
+		{1062D147-8462-4C66-8DEE-4B7F60E9F3FD}.Debug|x64.ActiveCfg = Debug|x64
+		{1062D147-8462-4C66-8DEE-4B7F60E9F3FD}.Debug|x64.Build.0 = Debug|x64
+		{1062D147-8462-4C66-8DEE-4B7F60E9F3FD}.Debug|x86.ActiveCfg = Debug|Win32
+		{1062D147-8462-4C66-8DEE-4B7F60E9F3FD}.Debug|x86.Build.0 = Debug|Win32
+		{1062D147-8462-4C66-8DEE-4B7F60E9F3FD}.Release|x64.ActiveCfg = Release|x64
+		{1062D147-8462-4C66-8DEE-4B7F60E9F3FD}.Release|x64.Build.0 = Release|x64
+		{1062D147-8462-4C66-8DEE-4B7F60E9F3FD}.Release|x86.ActiveCfg = Release|Win32
+		{1062D147-8462-4C66-8DEE-4B7F60E9F3FD}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

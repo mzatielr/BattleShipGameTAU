@@ -5,6 +5,8 @@
 #include "IBattleshipGameAlgo.h"
 #include "Windows.h"
 #include "../Common/IFileDirectoryUtils.h"
+#include "IArgumentParser.h"
+#include "GameManager.h"
 
 Logger MainLogger;
 
@@ -132,7 +134,7 @@ void PrintSinkCharRec(char** maingameboard, Bonus& b, int i, int j, int player)
 	PrintSinkCharRec(maingameboard, b, i + 1, j, player);
 }
 
-void SetPlayerBoards(char** board, IBattleshipGameAlgo*& playerA, IBattleshipGameAlgo*& playerB)
+void SetPlayerBoards( char** board, IBattleshipGameAlgo* playerA, IBattleshipGameAlgo* playerB)
 {
 	char** playerAboard = GameBoardUtils::ClonePlayerBoard(const_cast<const char**>(board), PlayerAID);
 	MainLogger.logFile << "CloneBoardForA" << endl;
@@ -182,16 +184,20 @@ void FreeGlobalVariable()
 
 int main(int argc, char* argv[]) 
 {
+
 	GetAlgorithmFuncType getPlayerAAlgo, getPlayerBAlgo;
 
 	bool dirExists = false; 
-	GameBoardUtils::InitLogger(MainLogger, "GetFullPathTest.log");
+	GameBoardUtils::InitLogger(MainLogger, "GameManager.log");
 
-	cout << "DirExists " << IFileDirectoryUtils::DirExists("C:\\Users\\mzaitler\\Downloads\\DynamicLoading") << endl;
+	Configuration config;
+	IArgumentParser::ParseArguments(config, argc, argv);
+	GameManager game(config);
+
+	int exitCode = game.RunGame();
 
 	MainLogger.LoggerDispose();
-	
-	return 0;
+	return exitCode;
 	// Configure Bonus start point and color
 	GameBoardUtils::ChangeFontSize();
 	BonusParams p; 
@@ -432,4 +438,15 @@ void FileDirectoryUtils_DirExists_PositiveScenario()
 	MainLogger.LoggerDispose();
 }
 
+void FileDirectoryUtils_GetAllFiles_PositiveScenario()
+{
+	GameBoardUtils::InitLogger(MainLogger, "GetAllFiles.log");
+	vector<string> matchFile;
+	cout << "Num of match file found " << IFileDirectoryUtils::GetAllFiles("C:\\temp\\New folder", "*.dll", matchFile) << endl;
+
+	for (auto itr = matchFile.begin(); itr != matchFile.end(); ++itr)
+		cout << *itr << endl;
+
+	MainLogger.LoggerDispose();
+}
 #pragma endregion 
