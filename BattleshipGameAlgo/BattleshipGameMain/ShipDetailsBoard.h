@@ -24,4 +24,4 @@ public:
 	AttackResult GetAttackResult(pair<int, int> attack);
 	bool IsLoose() const;
 	bool IsSinkRecursiveChecker(int row, int col, Direction dir = Direction::All) const;
- n};
+ };
