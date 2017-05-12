@@ -4,6 +4,7 @@
 #include <vector>
 #include "IBattleshipGameAlgo.h"
 #include "Windows.h"
+#include "../Common/IFileDirectoryUtils.h"
 
 Logger MainLogger;
 
@@ -184,8 +185,13 @@ int main(int argc, char* argv[])
 	GetAlgorithmFuncType getPlayerAAlgo, getPlayerBAlgo;
 
 	bool dirExists = false; 
-	GameBoardUtils::InitLogger(MainLogger, "Battle.log");
+	GameBoardUtils::InitLogger(MainLogger, "GetFullPathTest.log");
+
+	cout << "DirExists " << IFileDirectoryUtils::DirExists("C:\\Users\\mzaitler\\Downloads\\DynamicLoading") << endl;
+
+	MainLogger.LoggerDispose();
 	
+	return 0;
 	// Configure Bonus start point and color
 	GameBoardUtils::ChangeFontSize();
 	BonusParams p; 
@@ -396,3 +402,34 @@ int main(int argc, char* argv[])
 	GameBoardUtils::DeleteBoard(mainGameBoard);
 	return 0;
 }
+
+#pragma region Test
+
+void FileDirectoryUtils_GetCurrentWorkingDirectory_PositiveScenario()
+{
+	GameBoardUtils::InitLogger(MainLogger, "FileDirectoryTest.log");
+
+	cout << "Current working directory is " << IFileDirectoryUtils::GetCurrentWorkingDirectory() << endl;
+
+	MainLogger.LoggerDispose();
+}
+
+void FileDirectoryUtils_GetFullPath_PositiveScenario()
+{
+	GameBoardUtils::InitLogger(MainLogger, "GetFullPathTest.log");
+
+	cout << "Full Path is " << IFileDirectoryUtils::GetFullPath("C:\\Users\\mzaitler\\Downloads\\DynamicLoading") << endl;
+
+	MainLogger.LoggerDispose();
+}
+
+void FileDirectoryUtils_DirExists_PositiveScenario()
+{
+	GameBoardUtils::InitLogger(MainLogger, "GetFullPathTest.log");
+
+	cout << "DirExists " << IFileDirectoryUtils::DirExists("C:\\Users\\mzaitler\\Downloads\\DynamicLoading") << endl;
+
+	MainLogger.LoggerDispose();
+}
+
+#pragma endregion 

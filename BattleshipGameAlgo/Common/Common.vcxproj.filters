@@ -30,12 +30,18 @@
     <ClInclude Include="IOLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IFileDirectoryUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bonus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameBoardUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileDirectoryUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

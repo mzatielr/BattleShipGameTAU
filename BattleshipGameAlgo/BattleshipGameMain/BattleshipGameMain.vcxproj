@@ -152,11 +152,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IBattleshipGameAlgo.h" />
-    <ClInclude Include="IFileDirectoryUtils.h" />
     <ClInclude Include="ShipDetailsBoard.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FileDirectoryUtils.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ShipDetailsBoard.cpp" />
   </ItemGroup>

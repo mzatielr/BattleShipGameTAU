@@ -21,18 +21,12 @@
     <ClInclude Include="ShipDetailsBoard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IFileDirectoryUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ShipDetailsBoard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FileDirectoryUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
