@@ -34,6 +34,7 @@ class Bonus
 public:	
 	Bonus(bool enable, int waitTimeout = 1500);
 
+	static void ShowConsoleCursor(bool b);
 	void Init(char** board, int rows, int cols);
 	void PrintPlayerChar(char letter, short x, short y, int playerID, bool isWaitAfterPrint = true) const;
 	void Dispose() const;

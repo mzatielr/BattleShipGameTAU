@@ -205,7 +205,7 @@ bool GameManager::ValidAttackCor(const pair<int, int>& pair)
 }
 
 
-int GameManager::PlayGame()
+int GameManager::PlayGame() const
 {
 	ShipDetailsBoard playerAboardDetails(mainGameBoard, PlayerAID);
 	ShipDetailsBoard playerBboardDetails(mainGameBoard, PlayerBID);

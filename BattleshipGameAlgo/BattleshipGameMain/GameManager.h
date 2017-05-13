@@ -29,7 +29,7 @@ class GameManager
 	static void PrintSinkCharRec(char** maingameboard, Bonus& b, int i, int j, int player);
 	static bool IsPlayerWon(int currentPlayer, ShipDetailsBoard& detailsA, ShipDetailsBoard& detailsB);
 	static bool ValidAttackCor(const pair<int, int>& pair);
-	int PlayGame();
+	int PlayGame() const;
 
 	void GameManagerCleanup() const;
 public:

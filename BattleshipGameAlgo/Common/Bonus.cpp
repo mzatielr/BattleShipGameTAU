@@ -8,6 +8,21 @@ Bonus::Bonus(bool enable, int waitTimeout): enable(enable), waitInMiliseconds(wa
 {
 }
 
+void Bonus::ShowConsoleCursor(bool b)
+{
+	HANDLE out = GetstdOutHandle();
+	if (out == nullptr)
+	{
+		BonusLogger.logFile << "Failed to ShowConsoleCursor " << b << endl;
+		return;
+	}
+	CONSOLE_CURSOR_INFO     cursorInfo;
+
+	GetConsoleCursorInfo(out, &cursorInfo);
+	cursorInfo.bVisible = b; // set the cursor visibility
+	SetConsoleCursorInfo(out, &cursorInfo);
+}
+
 void Bonus::Init(char** board, int rows, int cols)
 {
 	if (!enable)
@@ -28,6 +43,7 @@ void Bonus::Init(char** board, int rows, int cols)
 	}
 	cout << endl;
 	StoreCurrentCoord();
+	ShowConsoleCursor(false);
 	Wait();
 }
 
@@ -210,5 +226,7 @@ void Bonus::Dispose() const
 	{
 		BonusLogger.logFile << "Failed to RestoreConsoleState";
 	}
+
+	ShowConsoleCursor(true);
 	BonusLogger.LoggerDispose();
 }
