@@ -17,7 +17,7 @@ class SmartBattleshipGameAlgo : public IBattleshipGameAlgo
 public:
 	//IBattleshipGameAlgo	
 	void setBoard(int player, const char** board, int numRows, int numCols) override; // called once to notify player on his board
-	static pair<int, int> AllignCord(const pair<int, int>& pair);
+	static pair<int, int> AllignCord(const pair<int, int>& pair, bool isNegative = false);
 	pair<int, int> attack() override; // ask player for his move
 	pair<int, int> GetValidRandomAttack();
 	pair<int, int> GetValidOptionalAttack();

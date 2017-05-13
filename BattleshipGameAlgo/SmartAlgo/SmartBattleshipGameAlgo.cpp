@@ -291,27 +291,28 @@ void SmartBattleshipGameAlgo::setBoard(int player, const char** board, int numRo
 	}
 }
 
-pair<int, int> SmartBattleshipGameAlgo::AllignCord(const pair<int, int>& pair)
+pair<int, int> SmartBattleshipGameAlgo::AllignCord(const pair<int, int>& pair, bool isNegative)
 {
 	if (pair.first != AttckDoneIndex && pair.second != AttckDoneIndex)
 	{
 		// Move to 1-10 cord
-		return{ pair.first + 1, pair.second + 1 };
+		int offset = isNegative ? -1 : 1;
+		return{ pair.first + offset, pair.second + offset };
 	}
 	return pair;
 }
 
 void SmartBattleshipGameAlgo::notifyOnAttackResult(int player, int row, int col, AttackResult result)
 {
-
-	if(player == m_myPlayerNum)
+	pair<int, int> cell = AllignCord({ row,col }, true);
+	if (player == m_myPlayerNum)
 	{
-		MarkInvalidCell(row, col, result);
-		HandleMyAttackResult(row, col, result);
+		MarkInvalidCell(cell.first, cell.second, result);
+		HandleMyAttackResult(cell.first, cell.second, result);
 	}
 	else
 	{
-		HandleRivalAttackResult(row, col, result);
+		HandleRivalAttackResult(cell.first, cell.second, result);
 	}
 }
 
