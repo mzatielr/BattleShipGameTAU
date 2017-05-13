@@ -33,6 +33,7 @@ bool AttackReciever::Init(const string& attackPath, int rows, int cols)
 		// Error occured on reading and EOF didn't reach
 		if (!_file && !_file.eof())
 		{
+			MainLogger.logFile << "Error: Read from file " << path << " failure!" << endl;
 			return false;
 		}
 		MainLogger.logFile << line << endl;
