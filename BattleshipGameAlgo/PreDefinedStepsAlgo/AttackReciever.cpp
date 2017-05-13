@@ -18,7 +18,11 @@ bool AttackReciever::Init(const string& attackPath, int rows, int cols)
 	m_Cols = cols;
 	path = attackPath;
 	_file.open(path);
-
+	if(!_file.is_open())
+	{
+		MainLogger.logFile << "Failed to open " << attackPath << endl;
+		return false;
+	}
 	MainLogger.logFile << "Starting loading lines" << endl;
 
 	while (!_file.eof())
@@ -29,7 +33,6 @@ bool AttackReciever::Init(const string& attackPath, int rows, int cols)
 		// Error occured on reading and EOF didn't reach
 		if (!_file && !_file.eof())
 		{
-			std::cout << "Error: Read from file " << path << " failure!" << std::endl;
 			return false;
 		}
 		MainLogger.logFile << line << endl;
