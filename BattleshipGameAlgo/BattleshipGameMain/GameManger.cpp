@@ -115,15 +115,15 @@ bool GameManager::InitDllAlgo(DllAlgo& algo, const string & path, int playerID) 
 		cout << "Algorithm initialization failed for dll: " << path << endl;
 		return false;
 	}
-
+	
 	MainLogger.logFile << "Init successfuly for player " << playerID << endl;
 	return true;
 }
 
-int GameManager::RunGame()
+int GameManager::GameInitializer()
 {
 	bool result = ConfigurePath();
-	if(!result)
+	if (!result)
 	{
 		return ErrorExitCode;
 	}
@@ -139,6 +139,19 @@ int GameManager::RunGame()
 	{
 		return ErrorExitCode;
 	}
-	
+
 	return 0;
 }
+
+int GameManager::RunGame()
+{
+	int code = GameInitializer();
+	if(code == ErrorExitCode)
+	{
+		return code;
+	}
+	MainLogger.logFile << "===== Game Initilized =======" << endl;
+
+}
+
+

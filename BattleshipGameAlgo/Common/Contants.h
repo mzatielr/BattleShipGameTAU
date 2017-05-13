@@ -29,7 +29,7 @@
 enum class BoardFileErrorCode {Success, UnknownError};
 
 // Exit code result in case of any failure. Should be used only in Main function
-#define ErrorExitCode -1;
+#define ErrorExitCode -1
 
 // A Player boat types representation 
 #define PlayerAID 0
