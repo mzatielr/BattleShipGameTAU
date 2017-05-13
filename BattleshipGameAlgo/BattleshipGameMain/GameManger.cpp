@@ -196,6 +196,12 @@ bool GameManager::IsPlayerWon(int currentPlayer, ShipDetailsBoard& detailsA, Shi
 	return currentPlayer == PlayerAID ? detailsB.IsLoose() : detailsA.IsLoose();
 }
 
+// Attack pair 1-10
+bool GameManager::ValidAttackCor(const pair<int, int>& pair)
+{
+	return pair.first > 0 && pair.first <= ROWS && pair.second > 0 && pair.second <= COLS;
+}
+
 
 int GameManager::PlayGame()
 {
@@ -228,13 +234,13 @@ int GameManager::PlayGame()
 			case PlayerBID:
 				BattacksDone = true;
 				break;
-			default: ;
+			default:;
 			}
 
 			// Flip players
 			playerIdToPlayNext = (playerIdToPlayNext == PlayerAID) ? PlayerBID : PlayerAID;
 		}
-		else
+		else if (ValidAttackCor(tempPair))
 		{
 			//aligned both axis -1 because main board starts from (0,0)
 			tempPair = { tempPair.first - 1,tempPair.second - 1 };
@@ -291,6 +297,13 @@ int GameManager::PlayGame()
 				return 0;
 			}
 		}
+		else
+		{
+			MainLogger.logFile << "Invlaid attack <" << tempPair.first << "," << tempPair.second
+								<< "> for player " << playerIdToPlayNext << ". Flipping players" << endl;
+			// Flip players
+			playerIdToPlayNext = (playerIdToPlayNext == PlayerAID) ? PlayerBID : PlayerAID;
+		}
 	}
 
 	bonus.Dispose(); // Important: Don't touch and don't change the order of statements [Mordehai]
@@ -318,14 +331,9 @@ int GameManager::RunGame()
 	}
 	MainLogger.logFile << "===== Game Initilized =======" << endl;
 
-	pair<int, int> attack = algo1.algo->attack();
-	while(attack.first!= AttckDoneIndex)
-	{
-		MainLogger.logFile << attack.first << "," << attack.second << endl;
-		attack = algo1.algo->attack();
-	}
-	//code = PlayGame();
-	code = 0;
+	
+	code = PlayGame();
+	
 	MainLogger.logFile << "Game exit code is " << code << endl;
 
 	GameManagerCleanup();
@@ -333,3 +341,16 @@ int GameManager::RunGame()
 }
 
 
+#pragma region Test
+
+void GameManager::Test_GetAllAttacks() const
+{
+	pair<int, int> attack = algo1.algo->attack();
+	while (attack.first != AttckDoneIndex)
+	{
+		MainLogger.logFile << attack.first << "," << attack.second << endl;
+		attack = algo1.algo->attack();
+	}
+}
+
+#pragma endregion 

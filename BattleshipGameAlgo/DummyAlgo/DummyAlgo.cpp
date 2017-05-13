@@ -19,7 +19,7 @@ void DummyAlgo::setBoard(int player, const char ** board, int numRows, int numCo
 
 std::pair<int, int> DummyAlgo::attack()
 {
-	return{ -1, -1 };
+	return{ -2, -2 };
 }
 
 void DummyAlgo::notifyOnAttackResult(int player, int row, int col, AttackResult result)
