@@ -13,7 +13,7 @@ Logger MainLogger;
 typedef IBattleshipGameAlgo *(*GetAlgorithmFuncType)();
 
 using namespace std;
-
+/*
 // Dll Loading global variables
 vector<tuple<string, HINSTANCE, GetAlgorithmFuncType>> dll_vec; // vector of <Algo Name, dll handle, GetAlgorithm function ptr>
 vector<tuple<string, HINSTANCE, GetAlgorithmFuncType>>::iterator vitr;
@@ -146,8 +146,8 @@ void SetPlayerBoards( char** board, IBattleshipGameAlgo* playerA, IBattleshipGam
 	playerA->setBoard(0,const_cast<const char**>(playerAboard), ROWS, COLS);
 	playerB->setBoard(1,const_cast<const char**>(playerBboard), ROWS, COLS);
 
-	GameBoardUtils::DeleteBoard(playerAboard);
-	GameBoardUtils::DeleteBoard(playerBboard);
+	GameBoardUtils::DeleteBoard(playerAboard,);
+	GameBoardUtils::DeleteBoard(playerBboard,);
 }
 
 pair<int, int> GetNextPlayerAttack(int player_id,  IBattleshipGameAlgo*  player_a, IBattleshipGameAlgo* player_b)
@@ -181,7 +181,7 @@ void FreeGlobalVariable()
 	MainLogger.LoggerDispose();
 	FreeLoadedResources();
 }
-
+*/
 int main(int argc, char* argv[]) 
 {
 	Configuration config;
@@ -251,7 +251,6 @@ int main(int argc, char* argv[])
 	}
 	GameBoardUtils::PrintBoard(MainLogger.logFile, mainGameBoard, ROWS, COLS);
 
-	//Todo: Move all this to PreDefinedStepsAlgo - we should pass a folder name and not a specific file [Must]
 	//get attack files path
 	string Aattackpath = GameBoardUtils::GetFilePathBySuffix(argc, dirPath, ".attack-a", dirExists);
 	if (Aattackpath == "ERR") 

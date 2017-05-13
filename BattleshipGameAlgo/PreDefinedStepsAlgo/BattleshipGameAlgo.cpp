@@ -47,8 +47,8 @@ void PreDefinedBattleshipGameAlgo::setBoard(int player, const char** board, int 
 	sprintf_s(name, "PreDefinedBattleshipGameAlgo%d.log", m_myPlayerNum);
 	MainLogger.InitLogger(name);
 
-	m_board = GameBoardUtils::InitializeNewEmptyBoard();
-	GameBoardUtils::CloneBoardToPlayer(board, m_myPlayerNum, m_board);
+	m_board = GameBoardUtils::InitializeNewEmptyBoard(numRows, numCols);
+	GameBoardUtils::CloneBoardToPlayer(board, m_myPlayerNum, m_board,numRows,numCols);
 }
 
 /*
@@ -62,7 +62,7 @@ void PreDefinedBattleshipGameAlgo::notifyOnAttackResult(int player, int row, int
 
 PreDefinedBattleshipGameAlgo::~PreDefinedBattleshipGameAlgo()
 {
-	GameBoardUtils::DeleteBoard(m_board);
+	GameBoardUtils::DeleteBoard(m_board, m_NumRow);
 
 	MainLogger.logFile << "Disposing object" << endl;
 	MainLogger.LoggerDispose();

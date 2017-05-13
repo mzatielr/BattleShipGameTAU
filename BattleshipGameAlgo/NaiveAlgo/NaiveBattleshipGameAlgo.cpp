@@ -68,7 +68,7 @@ void NaiveBattleshipGameAlgo::setBoard(int player, const char** board, int numRo
 	m_CurrentAttack.first = 1;
 	m_CurrentAttack.second = 1;
 
-	m_CannotAttackBoard = GameBoardUtils::InitializeNewEmptyBoard();
+	m_CannotAttackBoard = GameBoardUtils::InitializeNewEmptyBoard(numRows,numCols);
 
 	// Init all cells in m_CannotAttackBoard matrix with CanAttack Char
 	GameBoardUtils::InitBoard(m_CannotAttackBoard, m_NumRow, m_NumCol, CanAttck);
@@ -91,7 +91,7 @@ void NaiveBattleshipGameAlgo::notifyOnAttackResult(int player, int row, int col,
  */
 NaiveBattleshipGameAlgo::~NaiveBattleshipGameAlgo()
 {
-	GameBoardUtils::DeleteBoard(m_CannotAttackBoard);
+	GameBoardUtils::DeleteBoard(m_CannotAttackBoard,m_NumRow);
 }
 
 // Init Algorithm - Do nothing

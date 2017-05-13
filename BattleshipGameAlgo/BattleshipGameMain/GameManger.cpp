@@ -68,7 +68,7 @@ bool GameManager::ConfigureBoard()
 	string boardPath = collection[0];
 	MainLogger.logFile << "Board path in use is " << boardPath << endl;
 
-	mainGameBoard = GameBoardUtils::InitializeNewEmptyBoard();
+	mainGameBoard = GameBoardUtils::InitializeNewEmptyBoard(ROWS,COLS);
 	//load main game board from file & validate the board
 	if (GameBoardUtils::LoadBoardFromFile(mainGameBoard, ROWS, COLS, boardPath) != BoardFileErrorCode::Success)
 	{
@@ -104,8 +104,10 @@ bool GameManager::InitDllAlgo(DllAlgo& algo, const string & path, int playerID) 
 	}
 
 	// Set Player Board
-	char** playerboard = GameBoardUtils::ClonePlayerBoard(const_cast<const char**>(mainGameBoard), playerID);
+	char** playerboard = GameBoardUtils::ClonePlayerBoard(const_cast<const char**>(mainGameBoard), playerID,ROWS,COLS);
 	algo.algo->setBoard(playerID, const_cast<const char**>(playerboard), ROWS, COLS);
+	GameBoardUtils::DeleteBoard(playerboard, ROWS);
+
 	MainLogger.logFile << "Set board for player " << playerID << " finished" << endl;
 
 	// Init
@@ -313,7 +315,7 @@ int GameManager::PlayGame()
 
 void GameManager::GameManagerCleanup() const
 {
-	GameBoardUtils::DeleteBoard(mainGameBoard);
+	GameBoardUtils::DeleteBoard(mainGameBoard, ROWS);
 	algo1.Dispose();
 	algo2.Dispose();
 

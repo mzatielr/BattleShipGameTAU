@@ -271,14 +271,14 @@ void SmartBattleshipGameAlgo::setBoard(int player, const char** board, int numRo
 	m_myPlayerNum = player;
 	m_mode = AttackMode::RandomMode; // Starting from random mode
 
-	m_cannotAttackBoard = GameBoardUtils::InitializeNewEmptyBoard();
+	m_cannotAttackBoard = GameBoardUtils::InitializeNewEmptyBoard(numRows, numCols);
 	GameBoardUtils::InitBoard(m_cannotAttackBoard, numRows, numCols, CanAttck);
 	
-	m_board = GameBoardUtils::InitializeNewEmptyBoard();
-	GameBoardUtils::CloneBoardToPlayer(board, m_myPlayerNum, m_board);
+	m_board = GameBoardUtils::InitializeNewEmptyBoard(numRows,numCols);
+	GameBoardUtils::CloneBoardToPlayer(board, m_myPlayerNum, m_board, numRows, numCols);
 
 	//prepering a matrix to know where not to attack
-	GameBoardUtils::MarkCannotAttack(m_cannotAttackBoard, m_myPlayerNum, board);
+	GameBoardUtils::MarkCannotAttack(m_cannotAttackBoard, m_myPlayerNum, board, numRows, numCols);
 	for (int i = 0; i < m_NumRow; i++)
 	{
 		for (int j = 0; j < m_NumCol; j++)
@@ -307,8 +307,8 @@ void SmartBattleshipGameAlgo::notifyOnAttackResult(int player, int row, int col,
 
 SmartBattleshipGameAlgo::~SmartBattleshipGameAlgo()
 {
-	GameBoardUtils::DeleteBoard(m_board);
-	GameBoardUtils::DeleteBoard(m_cannotAttackBoard);
+	GameBoardUtils::DeleteBoard(m_board,m_NumRow);
+	GameBoardUtils::DeleteBoard(m_cannotAttackBoard,m_NumRow);
 }
 
 // Don't do  nothing.

@@ -31,9 +31,9 @@ int GetBoatTypeSizeFromChar (char type)
 }
 
 // Recursion function. Return if adjacent exist and mark all current boat with X
-bool MarkAllBoat(char** board, int i, int j, char type)
+bool MarkAllBoat(char** board, int i, int j, char type, int rows, int cols)
 {
-	if (i < 0 || i >= ROWS || j < 0 || j >= COLS) // Stop recursion condition
+	if (i < 0 || i >= rows || j < 0 || j >= cols) // Stop recursion condition
 	{
 		return false;
 	}
@@ -49,10 +49,10 @@ bool MarkAllBoat(char** board, int i, int j, char type)
 	}
 
 	board[i][j] = 'X'; // Mark current boat
-	bool left = MarkAllBoat(board, i, j - 1, type);
-	bool right = MarkAllBoat(board, i, j + 1, type);
-	bool up = MarkAllBoat(board, i - 1, j, type);
-	bool down = MarkAllBoat(board, i + 1, j, type);
+	bool left = MarkAllBoat(board, i, j - 1, type, rows, cols);
+	bool right = MarkAllBoat(board, i, j + 1, type, rows, cols);
+	bool up = MarkAllBoat(board, i - 1, j, type, rows, cols);
+	bool down = MarkAllBoat(board, i + 1, j, type, rows, cols);
 
 	return left || right || up || down;
 }
@@ -62,7 +62,7 @@ bool MarkAllBoat(char** board, int i, int j, char type)
 *direction 1 = check to the right
 *direction 0 = check down
 */
-bool CheckShipSize(char** board, char direction, int i, int j, char type)
+bool CheckShipSize(char** board, char direction, int i, int j, char type, int rows,int cols)
 {
 	int boardTypeSize = GetBoatTypeSizeFromChar(type);
 	int sizecheck = boardTypeSize - 1;
@@ -72,13 +72,13 @@ bool CheckShipSize(char** board, char direction, int i, int j, char type)
 	if (direction) //if checking to the right
 	{
 		size_t a = j;
-		for (size_t k = j; k <= std::fmin(j + sizecheck, COLS - 1); k++)
+		for (size_t k = j; k <= std::fmin(j + sizecheck, cols - 1); k++)
 		{
 			if (board[i][k] != type) // Check if next cell in right is ok - should be ok for all loop
 			{
 				return false;
 			}
-			if(i < ROWS-1 && board[i+1][k] == type) // check if there is no cell down of same type - should be flase
+			if(i < rows-1 && board[i+1][k] == type) // check if there is no cell down of same type - should be flase
 			{
 				return false;
 			}
@@ -86,7 +86,7 @@ bool CheckShipSize(char** board, char direction, int i, int j, char type)
 			
 			a = k + 1;
 		}
-		if(a < COLS-1 && board[i][a] == type) //check if boat is not larger than it should be from right
+		if(a < cols-1 && board[i][a] == type) //check if boat is not larger than it should be from right
 		{
 			return false;
 		}
@@ -95,13 +95,13 @@ bool CheckShipSize(char** board, char direction, int i, int j, char type)
 	else //direction of check is down
 	{
 		size_t a = i;
-		for (size_t k = i; k <= fmin(i + sizecheck, ROWS - 1); k++)
+		for (size_t k = i; k <= fmin(i + sizecheck, rows - 1); k++)
 		{
 			if (board[k][j] != type)// Check if next cell down is ok - should be ok for all loop
 			{
 				return false;
 			}
-			if (j < COLS - 1 && board[k][j + 1] == type) // check if there is no cell right of same type - should be flase
+			if (j < cols - 1 && board[k][j + 1] == type) // check if there is no cell right of same type - should be flase
 			{
 				return false;
 			}
@@ -112,7 +112,7 @@ bool CheckShipSize(char** board, char direction, int i, int j, char type)
 			size++; // Increment boat size in case all is ok
 			a = k + 1;
 		}
-		if (a < ROWS - 1 && board[a][j] == type) //check if boat is not larger than it should be
+		if (a < rows - 1 && board[a][j] == type) //check if boat is not larger than it should be
 		{
 			return false;
 		}
@@ -147,12 +147,11 @@ BoardFileErrorCode GameBoardUtils::ValidateGameBoard(char** board, int rows, int
 			char cell = board[i][j];
 			if (cell != 'X' && cell != BLANK)  //if i didnt check that place already and not BLANK
 			{
-				bool checkright, checkdown;
-				checkright = CheckShipSize(board, 1, i, j, cell); //check size to the right
-				checkdown = CheckShipSize(board, 0, i, j, cell); //check size down
+				bool checkright = CheckShipSize(board, 1, i, j, cell,rows,cols); //check size to the right
+				bool checkdown = CheckShipSize(board, 0, i, j, cell, rows, cols); //check size down
 
 				bool isBoatOfValidSize = GetBoatTypeSizeFromChar(cell) == 1 ? checkright & checkdown : checkright^checkdown; //xor because we want only one of them to be ok
-				bool adjacent = MarkAllBoat(board, i, j, cell); // Flag which specified if there is another boat of different type or different player that adjacent to the current boat
+				bool adjacent = MarkAllBoat(board, i, j, cell, rows, cols); // Flag which specified if there is another boat of different type or different player that adjacent to the current boat
 				adjacentErr = adjacentErr || adjacent;
 
 				if(isBoatOfValidSize) // Update boat number
@@ -315,19 +314,19 @@ void GameBoardUtils::LoadLineToBoard(char** board, int row, int cols, const stri
 	}
 }
 
-char** GameBoardUtils::InitializeNewEmptyBoard()
+char** GameBoardUtils::InitializeNewEmptyBoard(int rows, int cols)
 {
-	char** board = new char*[ROWS];
-	for (int i = 0; i < ROWS; ++i)
+	char** board = new char*[rows];
+	for (int i = 0; i < rows; ++i)
 	{
-		board[i] = new char[COLS];
+		board[i] = new char[cols];
 	}
 	return board;
 }
 
-void GameBoardUtils::DeleteBoard(char** board) {
+void GameBoardUtils::DeleteBoard(char** board, int rows) {
 	// Delete board array
-	for (int i = 0; i < ROWS; ++i) {
+	for (int i = 0; i < rows; ++i) {
 		delete[] board[i];
 	}
 	delete[] board;
@@ -342,7 +341,7 @@ BoardFileErrorCode GameBoardUtils::LoadBoardFromFile(char** board, int rows, int
 	FileReader fileReader(filePath);
 
 	int row = 0;
-	while (!fileReader.IsEof() && row < 10)
+	while (!fileReader.IsEof() && row < rows)
 	{
 		string line;
 		fileReader.ReadLine(line);
@@ -353,12 +352,12 @@ BoardFileErrorCode GameBoardUtils::LoadBoardFromFile(char** board, int rows, int
 	fileReader.CloseFile();
 	
 	// Clone current board, becaue ValidateGameBoard changed the board
-	char** cloneBoard = GameBoardUtils::InitializeNewEmptyBoard();
-	GameBoardUtils::CloneBoard(board, cloneBoard);
-	BoardFileErrorCode errcode = ValidateGameBoard(cloneBoard, ROWS, COLS);
+	char** cloneBoard = GameBoardUtils::InitializeNewEmptyBoard(rows,cols);
+	GameBoardUtils::CloneBoard(board, cloneBoard,rows,cols);
+	BoardFileErrorCode errcode = ValidateGameBoard(cloneBoard, rows, cols);
 
 	// Delete clone board
-	DeleteBoard(cloneBoard);
+	DeleteBoard(cloneBoard,rows);
 
 	return errcode;
 }
@@ -377,24 +376,24 @@ void GameBoardUtils::PrintBoard(ostream& stream, char** board, int rows, int col
 	}
 }
 
-void GameBoardUtils::CloneBoardToPlayer(const char** full_board, int playerID, char** player_board) {
-	InitBoard(player_board, ROWS, COLS);
+void GameBoardUtils::CloneBoardToPlayer(const char** full_board, int playerID, char** player_board, int rows, int cols) {
+	InitBoard(player_board, rows, cols);
 
-	for (size_t i = 0; i < ROWS; i++)
+	for (size_t i = 0; i < rows; i++)
 	{
-		for (size_t j = 0; j < COLS; j++)
+		for (size_t j = 0; j < cols; j++)
 		{
 			player_board[i][j] = IsPlayerIdChar(playerID, full_board[i][j]) ? full_board[i][j] : player_board[i][j];
 		}
 	}
 }
 
-void GameBoardUtils::CloneBoard(char** full_board, char** player_board) {
-	InitBoard(player_board, ROWS, COLS);
+void GameBoardUtils::CloneBoard(char** full_board, char** player_board, int rows, int cols) {
+	InitBoard(player_board, rows, cols);
 
-	for (size_t i = 0; i < ROWS; i++)
+	for (size_t i = 0; i < rows; i++)
 	{
-		for (size_t j = 0; j < COLS; j++)
+		for (size_t j = 0; j < cols; j++)
 		{
 			player_board[i][j] = full_board[i][j];
 		}
@@ -529,10 +528,10 @@ bool GameBoardUtils::DirExists(const std::string& dirName_in)
 	return false;    // this is not a directory!
 }
 
-char** GameBoardUtils::ClonePlayerBoard(const char** fullBoard, int i)
+char** GameBoardUtils::ClonePlayerBoard(const char** fullBoard, int i, int rows, int cols)
 {
-	char** playerBoard = GameBoardUtils::InitializeNewEmptyBoard();
-	GameBoardUtils::CloneBoardToPlayer(fullBoard, i, playerBoard);
+	char** playerBoard = GameBoardUtils::InitializeNewEmptyBoard(rows,cols);
+	GameBoardUtils::CloneBoardToPlayer(fullBoard, i, playerBoard,rows,cols);
 	return playerBoard;
 }
 
