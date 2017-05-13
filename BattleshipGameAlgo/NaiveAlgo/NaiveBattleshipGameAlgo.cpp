@@ -17,11 +17,11 @@ pair<int, int> NaiveBattleshipGameAlgo::attack()
 
 	//convert back to our matrix coordinates
 	int i = m_CurrentAttack.first - 1;
+	int j = m_CurrentAttack.second - 1;
 
 	//find next attack
 	while (i < m_NumRow)
 	{
-		int j = 0;
 		while (j < m_NumCol)
 		{
 			if (m_CannotAttackBoard[i][j] == CanAttck)
@@ -46,6 +46,7 @@ pair<int, int> NaiveBattleshipGameAlgo::attack()
 			}
 			j++;
 		}
+		j = 0;
 		i++;
 	}
 
