@@ -78,7 +78,7 @@ bool PreDefinedBattleshipGameAlgo::init(const std::string& path)
 	}
 	MainLogger.logFile << "[PreDefinedAlgo - Init] Attack file for player " << m_myPlayerNum << " is " << attackFilePath << endl;
 	
-	return m_attackReceiver.Init(attackFilePath);
+	return m_attackReceiver.Init(attackFilePath, m_NumRow, m_NumCol);
 }
 
 

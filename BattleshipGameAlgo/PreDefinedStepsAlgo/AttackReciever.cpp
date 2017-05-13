@@ -12,8 +12,10 @@ AttackReciever::AttackReciever()
 {
 }
 
-bool AttackReciever::Init(const string& attackPath)
+bool AttackReciever::Init(const string& attackPath, int rows, int cols)
 {
+	m_Rows = rows;
+	m_Cols = cols;
 	path = attackPath;
 	_file.open(path);
 
@@ -74,7 +76,7 @@ int AttackReciever::ReadNextAttack(pair<int, int>& pair)
 	}
 
 	//checking if index is ok
-	if ((row > 10) || (row < 1) || (col < 1) || (col > 10))
+	if ((row > m_Rows) || (row < 1) || (col < 1) || (col > m_Cols))
 	{
 		// Values are out of range
 		return 1;
