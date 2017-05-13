@@ -7,7 +7,7 @@ pair<int, int> SmartBattleshipGameAlgo::attack()
 {
 	if (m_mode == AttackMode::RandomMode)
 	{
-		return GetValidRandomAttack();
+		pair<int, int> att = AllignCord(GetValidRandomAttack());
 	}
 	
 	// Target Mode
@@ -16,10 +16,10 @@ pair<int, int> SmartBattleshipGameAlgo::attack()
 	{
 		// Return to random state
 		StartRandomAttackMode();
-		return GetValidRandomAttack();
+		return AllignCord(GetValidRandomAttack());
 	}
 
-	return attackPair;
+	return AllignCord(attackPair);
 }
 
 pair<int,int> SmartBattleshipGameAlgo::GetValidRandomAttack ()
@@ -289,6 +289,16 @@ void SmartBattleshipGameAlgo::setBoard(int player, const char** board, int numRo
 			}
 		}
 	}
+}
+
+pair<int, int> SmartBattleshipGameAlgo::AllignCord(const pair<int, int>& pair)
+{
+	if (pair.first != AttckDoneIndex && pair.second != AttckDoneIndex)
+	{
+		// Move to 1-10 cord
+		return{ pair.first + 1, pair.second + 1 };
+	}
+	return pair;
 }
 
 void SmartBattleshipGameAlgo::notifyOnAttackResult(int player, int row, int col, AttackResult result)
