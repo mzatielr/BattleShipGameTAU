@@ -8,11 +8,13 @@
 
 using namespace std;
 
-AttackReciever::AttackReciever(const string& attackPath) : path(attackPath)
+AttackReciever::AttackReciever()
 {
 }
-bool AttackReciever::Init()
+
+bool AttackReciever::Init(const string& attackPath)
 {
+	path = attackPath;
 	_file.open(path);
 
 	MainLogger.logFile << "Starting loading lines" << endl;

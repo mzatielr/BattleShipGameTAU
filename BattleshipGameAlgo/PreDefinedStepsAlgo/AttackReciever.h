@@ -14,8 +14,8 @@ class AttackReciever {
 
 	void Dispose();
 public:
-	AttackReciever(const string& attackPath);
-	bool Init();
+	AttackReciever();
+	bool Init(const string& attackPath);
 	int ReadNextAttack(std::pair<int, int>& pair);
 	pair<int, int> GetNextLegalAttack();
 	int ConvertStringToIntSafely(string& line, int& number) const;

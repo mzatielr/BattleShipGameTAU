@@ -184,11 +184,6 @@ void FreeGlobalVariable()
 
 int main(int argc, char* argv[]) 
 {
-
-	GetAlgorithmFuncType getPlayerAAlgo, getPlayerBAlgo;
-
-	bool dirExists = false; 
-
 	Configuration config;
 	IArgumentParser::ParseArguments(config, argc, argv);
 	GameManager game(config);
@@ -198,8 +193,6 @@ int main(int argc, char* argv[])
 	/*
 	BonusParams p; 
 
-	//Todo: Move all this if to function [Optional]
-	//Todo: Ozeri refacrtor and improve implementation - something better than "NS" [Optional]
 	string dirPath("NS");
 	
 	//aquiring arguments and checking if dir exists
@@ -232,12 +225,11 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	//TODO: add search in working directory in case less then 2 were found + not working on command line with spaces
 	if (LoadDllFilesByOrder(dirPath, getPlayerAAlgo, getPlayerBAlgo, dirExists))
 	{
 		cout << "Error loading dll files. exiting" << endl;
 		FreeGlobalVariable();
-		return ErrorExitCode; //TODO: release all and check is ok
+		return ErrorExitCode; 
 	}
 
 	//get .sboard file path

@@ -39,5 +39,5 @@ private:
 	//my board game
 	char** m_board; 
 	
-	AttackReciever* m_attackReceiver;
+	AttackReciever m_attackReceiver;
 };

@@ -10,7 +10,7 @@
 Logger MainLogger;
 
 PreDefinedBattleshipGameAlgo::PreDefinedBattleshipGameAlgo()
-	: m_NumRow(0), m_NumCol(0), m_myPlayerNum(0), m_attacksDone(false), m_board(nullptr), m_attackReceiver(nullptr)
+	: m_NumRow(0), m_NumCol(0), m_myPlayerNum(0), m_attacksDone(false), m_board(nullptr)
 {
 }
 
@@ -26,7 +26,7 @@ std::pair<int,int> PreDefinedBattleshipGameAlgo::attack()
 		return pair<int, int>{AttckDoneIndex, AttckDoneIndex};
 	}
 
-	pair<int, int> attack = m_attackReceiver->GetNextLegalAttack();
+	pair<int, int> attack = m_attackReceiver.GetNextLegalAttack();
 	if(attack.first == AttckDoneIndex)
 	{
 		m_attacksDone = true;
@@ -63,7 +63,6 @@ void PreDefinedBattleshipGameAlgo::notifyOnAttackResult(int player, int row, int
 PreDefinedBattleshipGameAlgo::~PreDefinedBattleshipGameAlgo()
 {
 	GameBoardUtils::DeleteBoard(m_board);
-	delete m_attackReceiver;
 
 	MainLogger.logFile << "Disposing object" << endl;
 	MainLogger.LoggerDispose();
@@ -79,8 +78,7 @@ bool PreDefinedBattleshipGameAlgo::init(const std::string& path)
 	}
 	MainLogger.logFile << "[PreDefinedAlgo - Init] Attack file for player " << m_myPlayerNum << " is " << attackFilePath << endl;
 	
-	m_attackReceiver = new AttackReciever(attackFilePath);
-	return m_attackReceiver->Init();
+	return m_attackReceiver.Init(attackFilePath);
 }
 
 
