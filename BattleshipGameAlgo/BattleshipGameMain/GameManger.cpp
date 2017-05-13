@@ -224,9 +224,8 @@ int GameManager::PlayGame() const
 	// While not both of players ended their attacks
 	while (!AattacksDone || !BattacksDone)
 	{
-		pair<int, int> tempPair = GetNextPlayerAttack(playerIdToPlayNext, algo1.algo, algo2.algo); //TODO: move all func from main into GameBoardUtils [Optional]
-		//end of attacks
-		if ((tempPair.first == AttckDoneIndex) && (tempPair.second == AttckDoneIndex))
+		pair<int, int> tempPair = GetNextPlayerAttack(playerIdToPlayNext, algo1.algo, algo2.algo); 
+		if (tempPair.first == AttckDoneIndex && (tempPair.second == AttckDoneIndex))
 		{
 			switch (playerIdToPlayNext)
 			{
@@ -252,6 +251,17 @@ int GameManager::PlayGame() const
 
 			//calculate attack and update mainboard
 			AttackResult tempattackresult = GetAttackResult(tempPair, mainGameBoard, playerAboardDetails, playerBboardDetails);
+
+			string resultDesc;
+			switch (tempattackresult)
+			{
+			case AttackResult::Miss: resultDesc = "Miss";  break;
+			case AttackResult::Hit: resultDesc = "Hit"; break;
+			case AttackResult::Sink:resultDesc = "Sink"; break;
+			default: ;
+			}
+
+			MainLogger.logFile << "Player " << playerIdToPlayNext << " attack in (" << tempPair.first << "," << tempPair.second << ") result: " << resultDesc << endl;
 
 			//update players - Notify with values 1-10 and not 0-9
 			algo1.algo->notifyOnAttackResult(playerIdToPlayNext, tempPair.first + 1, tempPair.second + 1, tempattackresult);
