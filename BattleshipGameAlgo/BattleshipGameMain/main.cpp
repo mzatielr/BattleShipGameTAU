@@ -162,7 +162,7 @@ pair<int, int> GetNextPlayerAttack(int player_id,  IBattleshipGameAlgo*  player_
 	}
 	// Fatal Error
 	MainLogger.logFile << "Fatal error occured. Attack move was asked for non exixting player id " << player_id << endl;
-	return{ ErrorDuringGetAttackIndex,ErrorDuringGetAttackIndex };
+	return{ };
 }
 
 AttackResult GetAttackResult(const pair<int, int>& pair, char** board, ShipDetailsBoard& detailsA, ShipDetailsBoard& detailsB)
@@ -195,7 +195,7 @@ int main(int argc, char* argv[])
 
 	int exitCode = game.RunGame();
 	return exitCode;
-	
+	/*
 	BonusParams p; 
 
 	//Todo: Move all this if to function [Optional]
@@ -308,7 +308,7 @@ int main(int argc, char* argv[])
 	// While not both of players ended their attacks
 	while (!AattacksDone || !BattacksDone)
 	{
-		pair<int, int> tempPair = GetNextPlayerAttack(playerIdToPlayNext, algoA, algoB); //TODO: move all func from main into GameBoardUtils [Optional]
+		pair<int, int> tempPair = GetNextPlayerAttack(playerIdToPlayNext, algoA, algoB); 
 
 		//Error occurred 
 		if (tempPair.first == ErrorDuringGetAttackIndex && tempPair.second == ErrorDuringGetAttackIndex)
@@ -402,7 +402,7 @@ int main(int argc, char* argv[])
 
 	FreeGlobalVariable();
 	GameBoardUtils::DeleteBoard(mainGameBoard);
-	return 0;
+	return 0;*/
 }
 
 #pragma region Test

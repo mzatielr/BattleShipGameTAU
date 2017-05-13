@@ -17,7 +17,7 @@ PreDefinedBattleshipGameAlgo::PreDefinedBattleshipGameAlgo()
 
 /*
 * \brief Find next cell to attck 
-* \return (-1,-1) in case of EOF. (-2, -2) in case of any failure - should return values between 1-10 and not 0-9 (EX2 specification)
+* \return (-1,-1) in case of EOF - should return values between 1-10 and not 0-9 (EX2 specification)
 */
 std::pair<int,int> PreDefinedBattleshipGameAlgo::attack()
 {
@@ -27,7 +27,7 @@ std::pair<int,int> PreDefinedBattleshipGameAlgo::attack()
 	}
 
 	pair<int, int> attack = m_attackReceiver->GetNextLegalAttack();
-	if(attack.first == AttckDoneIndex || attack.first == ErrorDuringGetAttackIndex)
+	if(attack.first == AttckDoneIndex)
 	{
 		m_attacksDone = true;
 	}

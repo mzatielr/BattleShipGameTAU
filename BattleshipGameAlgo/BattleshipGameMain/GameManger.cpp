@@ -156,7 +156,7 @@ pair<int, int> GameManager::GetNextPlayerAttack(int player_id, IBattleshipGameAl
 	}
 	// Fatal Error
 	MainLogger.logFile << "Fatal error occured. Attack move was asked for non exixting player id " << player_id << endl;
-	return{ ErrorDuringGetAttackIndex,ErrorDuringGetAttackIndex };
+	return{ };
 }
 
 
@@ -318,6 +318,12 @@ int GameManager::RunGame()
 	}
 	MainLogger.logFile << "===== Game Initilized =======" << endl;
 
+	pair<int, int> attack = algo1.algo->attack();
+	while(attack.first!= AttckDoneIndex)
+	{
+		MainLogger.logFile << attack.first << "," << attack.second << endl;
+		attack = algo1.algo->attack();
+	}
 	//code = PlayGame();
 	code = 0;
 	MainLogger.logFile << "Game exit code is " << code << endl;

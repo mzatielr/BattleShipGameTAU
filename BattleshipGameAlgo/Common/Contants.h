@@ -16,7 +16,6 @@
 
 // Attack Retrive special indexes
 #define AttckDoneIndex -1
-#define ErrorDuringGetAttackIndex -2
 
 // Attack Flags Special Flags
 //Y - yes means we can attack here. 'N' means not

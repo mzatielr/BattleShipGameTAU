@@ -39,7 +39,6 @@ bool AttackReciever::Init()
 
 // Returns: 0 - Attck found
 //			1 - Invalid 
-//			-1 - Error
 int AttackReciever::ReadNextAttack(pair<int, int>& pair)
 {
 	// Read next line
@@ -61,7 +60,7 @@ int AttackReciever::ReadNextAttack(pair<int, int>& pair)
 	// Get string from 0 to index (exclude)
 	string rowString = line.substr(0, index);
 
-	//Get string from index +
+	//Get string from index + 1 to end
 	string colString = line.substr(index + 1);
 
 	//convert attack string into int's
@@ -85,10 +84,10 @@ int AttackReciever::ReadNextAttack(pair<int, int>& pair)
 }
 
 // Return {-1,-1} EOF
-//			{-2,-2} Error
+//			valid {row,col} attack
 pair<int, int> AttackReciever::GetNextLegalAttack()
 {
-	std::string attackRow, attackCol;
+	string attackRow, attackCol;
 
 	while (fileRowsQueue.size() > 0)
 	{
@@ -100,12 +99,8 @@ pair<int, int> AttackReciever::GetNextLegalAttack()
 		}
 		if (result == 1) // Attack is Invalid
 		{
+			//Countinue until find valid attack or EOF
 			continue;
-		}
-
-		if (result == -1) // Failure during reading 
-		{
-			return{ ErrorDuringGetAttackIndex, ErrorDuringGetAttackIndex };
 		}
 	}
 	return{ AttckDoneIndex, AttckDoneIndex };
