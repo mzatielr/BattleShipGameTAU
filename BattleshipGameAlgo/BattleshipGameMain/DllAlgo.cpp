@@ -35,3 +35,8 @@ bool DllAlgo::LoadDll(const string& dllPath)
 	return true;
 }
 
+void DllAlgo::Dispose() const
+{
+	delete algo;
+	FreeLibrary(handle.first);
+}

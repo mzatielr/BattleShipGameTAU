@@ -16,6 +16,7 @@ public:
 	DllAlgo();
 	IBattleshipGameAlgo* algo;
 	bool LoadDll(const string& dllPath);
+	void Dispose() const;
 private:
 	string path;
 	pair <HINSTANCE, GetAlgorithmFuncType> handle;

@@ -55,6 +55,8 @@ public:
 	}
 	void LoggerDispose()
 	{
+		logFile << "Disposing log file" << endl;
+
 		logFile.close();
 	}
 };

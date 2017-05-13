@@ -188,18 +188,14 @@ int main(int argc, char* argv[])
 	GetAlgorithmFuncType getPlayerAAlgo, getPlayerBAlgo;
 
 	bool dirExists = false; 
-	GameBoardUtils::InitLogger(MainLogger, "GameManager.log");
 
 	Configuration config;
 	IArgumentParser::ParseArguments(config, argc, argv);
 	GameManager game(config);
 
 	int exitCode = game.RunGame();
-
-	MainLogger.LoggerDispose();
 	return exitCode;
-	// Configure Bonus start point and color
-	GameBoardUtils::ChangeFontSize();
+	
 	BonusParams p; 
 
 	//Todo: Move all this if to function [Optional]

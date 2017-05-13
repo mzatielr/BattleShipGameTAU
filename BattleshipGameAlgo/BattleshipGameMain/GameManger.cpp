@@ -204,11 +204,12 @@ int GameManager::PlayGame()
 
 	int playerIdToPlayNext = PlayerAID;
 
+	// Configure Bonus start point and color
 	Bonus bonus(!config.bonusParam.isQuiet, config.bonusParam.delayInMiliseconds);
 	bonus.Init(mainGameBoard, ROWS, COLS);
+	GameBoardUtils::ChangeFontSize();
 
 	//main game play
-
 	bool AattacksDone = false;
 	bool BattacksDone = false;
 
@@ -244,9 +245,9 @@ int GameManager::PlayGame()
 			//calculate attack and update mainboard
 			AttackResult tempattackresult = GetAttackResult(tempPair, mainGameBoard, playerAboardDetails, playerBboardDetails);
 
-			//update players
-			algo1.algo->notifyOnAttackResult(playerIdToPlayNext, tempPair.first + 1, tempPair.second, tempattackresult);
-			algo2.algo->notifyOnAttackResult(playerIdToPlayNext, tempPair.first, tempPair.second, tempattackresult);
+			//update players - Notify with values 1-10 and not 0-9
+			algo1.algo->notifyOnAttackResult(playerIdToPlayNext, tempPair.first + 1, tempPair.second + 1, tempattackresult);
+			algo2.algo->notifyOnAttackResult(playerIdToPlayNext, tempPair.first + 1, tempPair.second + 1, tempattackresult);
 
 			if (tempattackresult != AttackResult::Miss)
 			{
@@ -280,9 +281,6 @@ int GameManager::PlayGame()
 				bonus.Dispose(); // Important: Don't touch and don't change the order of statements [Mordehai]
 				cout << "Player A won" << endl;
 				PrintPoints(playerAboardDetails, playerBboardDetails);
-
-				GameBoardUtils::DeleteBoard(mainGameBoard);
-				//FreeGlobalVariable();
 				return 0;
 			}
 			if (IsPlayerWon(PlayerBID, playerAboardDetails, playerBboardDetails))
@@ -290,9 +288,6 @@ int GameManager::PlayGame()
 				bonus.Dispose(); // Important: Don't touch and don't change the order of statements [Mordehai]
 				cout << "Player B won" << endl;
 				PrintPoints(playerAboardDetails, playerBboardDetails);
-
-				GameBoardUtils::DeleteBoard(mainGameBoard);
-				//FreeGlobalVariable();
 				return 0;
 			}
 		}
@@ -300,14 +295,22 @@ int GameManager::PlayGame()
 
 	bonus.Dispose(); // Important: Don't touch and don't change the order of statements [Mordehai]
 	PrintPoints(playerAboardDetails, playerBboardDetails);
-
-	//FreeGlobalVariable();
-	GameBoardUtils::DeleteBoard(mainGameBoard);
 	return 0;
+}
+
+void GameManager::GameManagerCleanup() const
+{
+	GameBoardUtils::DeleteBoard(mainGameBoard);
+	algo1.Dispose();
+	algo2.Dispose();
+
+	MainLogger.LoggerDispose();
 }
 
 int GameManager::RunGame()
 {
+	GameBoardUtils::InitLogger(MainLogger, "GameManager.log");
+
 	int code = GameInitializer();
 	if(code == ErrorExitCode)
 	{
@@ -315,6 +318,11 @@ int GameManager::RunGame()
 	}
 	MainLogger.logFile << "===== Game Initilized =======" << endl;
 
+	code = PlayGame();
+	MainLogger.logFile << "Game exit code is " << code << endl;
+
+	GameManagerCleanup();
+	return code;
 }
 
 
