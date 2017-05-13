@@ -17,9 +17,9 @@ bool DllAlgo::LoadDll(const string& dllPath)
 	}
 
 	GetAlgorithmFuncType GetAlgorithmFunc = (GetAlgorithmFuncType)GetProcAddress(hDll, "GetAlgorithm");
-	if (!GetAlgorithmFunc)
+	if (GetAlgorithmFunc == nullptr)
 	{
-		MainLogger.logFile << "could not load function GetAlgorithm()" << std::endl;
+		MainLogger.logFile << "could not load function GetAlgorithm() ErrorCode: " << GetLastError() << endl;
 		return false;
 	}
 
