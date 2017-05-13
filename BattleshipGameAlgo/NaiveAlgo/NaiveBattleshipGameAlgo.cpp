@@ -86,7 +86,7 @@ checking of if the game is ended will be at main function
 */
 void NaiveBattleshipGameAlgo::notifyOnAttackResult(int player, int row, int col, AttackResult result)
 {
-	//TODO: complete notify - is it needed at all?
+	// Do nothing - Naive algo use only data from the begining and don't infulended from any other data
 }
 
 /*
