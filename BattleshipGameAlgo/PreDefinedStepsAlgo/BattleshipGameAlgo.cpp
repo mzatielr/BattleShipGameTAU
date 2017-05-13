@@ -57,6 +57,7 @@ checking of if the game is ended will be at main function
 */
 void PreDefinedBattleshipGameAlgo::notifyOnAttackResult(int player, int row, int col, AttackResult result)
 {
+	//Do nothing
 }
 
 PreDefinedBattleshipGameAlgo::~PreDefinedBattleshipGameAlgo()
