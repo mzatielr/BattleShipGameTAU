@@ -318,7 +318,8 @@ int GameManager::RunGame()
 	}
 	MainLogger.logFile << "===== Game Initilized =======" << endl;
 
-	code = PlayGame();
+	//code = PlayGame();
+	code = 0;
 	MainLogger.logFile << "Game exit code is " << code << endl;
 
 	GameManagerCleanup();

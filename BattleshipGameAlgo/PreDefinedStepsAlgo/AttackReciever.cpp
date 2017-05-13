@@ -4,6 +4,7 @@
 #include <string>
 #include <algorithm>
 #include "../Common/Contants.h"
+#include "../BattleshipGameMain/DllAlgo.h"
 
 using namespace std;
 
@@ -13,6 +14,8 @@ AttackReciever::AttackReciever(const string& attackPath) : path(attackPath)
 bool AttackReciever::Init()
 {
 	_file.open(path);
+
+	MainLogger.logFile << "Starting loading lines" << endl;
 
 	while (!_file.eof())
 	{
@@ -25,7 +28,7 @@ bool AttackReciever::Init()
 			std::cout << "Error: Read from file " << path << " failure!" << std::endl;
 			return false;
 		}
-
+		MainLogger.logFile << line << endl;
 		fileRowsQueue.push(line);
 	}
 

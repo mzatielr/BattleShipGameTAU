@@ -5,7 +5,9 @@
 #include <utility>
 #include "../Common/GameBoardUtils.h"
 #include "AttackReciever.h"
+#include "AttackFileUtilis.h"
 
+Logger MainLogger;
 
 PreDefinedBattleshipGameAlgo::PreDefinedBattleshipGameAlgo()
 	: m_NumRow(0), m_NumCol(0), m_myPlayerNum(0), m_attacksDone(false), m_board(nullptr), m_attackReceiver(nullptr)
@@ -41,6 +43,10 @@ void PreDefinedBattleshipGameAlgo::setBoard(int player, const char** board, int 
 	m_NumCol = numCols;
 	m_myPlayerNum = player;
 
+	char name[100];
+	sprintf_s(name, "PreDefinedBattleshipGameAlgo%d.log", m_myPlayerNum);
+	MainLogger.InitLogger(name);
+
 	m_board = GameBoardUtils::InitializeNewEmptyBoard();
 	GameBoardUtils::CloneBoardToPlayer(board, m_myPlayerNum, m_board);
 }
@@ -57,11 +63,22 @@ PreDefinedBattleshipGameAlgo::~PreDefinedBattleshipGameAlgo()
 {
 	GameBoardUtils::DeleteBoard(m_board);
 	delete m_attackReceiver;
+
+	MainLogger.logFile << "Disposing object" << endl;
+	MainLogger.LoggerDispose();
 }
 
 bool PreDefinedBattleshipGameAlgo::init(const std::string& path)
 {
-	m_attackReceiver = new AttackReciever(path); //TODO: need to init the attack file here
+	string attackFilePath = AttackFileUtils::GetAttackFile(path, m_myPlayerNum);
+	if(attackFilePath.empty())
+	{
+		MainLogger.logFile << "[PreDefinedAlgo - Init] Init failed due to non found attack file" << endl;;
+		return false;
+	}
+	MainLogger.logFile << "[PreDefinedAlgo - Init] Attack file for player " << m_myPlayerNum << " is " << attackFilePath << endl;
+	
+	m_attackReceiver = new AttackReciever(attackFilePath);
 	return m_attackReceiver->Init();
 }
 
