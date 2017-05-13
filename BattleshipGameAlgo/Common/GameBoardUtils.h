@@ -23,7 +23,7 @@ public:
 	static void PrintBoard(ostream& stream, char** board, int rows, int cols);
 	static void CloneBoardToPlayer(const char** full_board, int playerID, char** player_board);
 	static void CloneBoard(char** full_board, char** player_board);
-	static void MarkCannotAttack(char** markBoard, int playernum, char** mainBoard, int rows = ROWS, int cols = COLS);
+	static void MarkCannotAttack(char** markBoard, int playernum, const char** mainBoard, int rows = ROWS, int cols = COLS);
 	static string GetFilePathBySuffix(int argc, string customPath, string filesuffix, bool direxists = true);
 	static bool DirExists(const std::string& dirName_in);
 	static char** ClonePlayerBoard(const char** fullBoard, int i);

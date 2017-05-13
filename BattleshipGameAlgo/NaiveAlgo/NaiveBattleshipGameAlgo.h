@@ -27,9 +27,6 @@ private:
 	//boolean value setting if i finished my attacks
 	bool m_AttacksDone;
 	
-	//my board game - should contain only my ships
-	char** m_Board;
-	
 	//a board for marking where cant we attack
 	char** m_CannotAttackBoard;
 	

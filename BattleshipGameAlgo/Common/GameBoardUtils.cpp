@@ -401,7 +401,7 @@ void GameBoardUtils::CloneBoard(char** full_board, char** player_board) {
 	}
 }
 
-void GameBoardUtils::MarkCannotAttack(char** markBoard, int playernum, char** mainBoard, int rows, int cols)
+void GameBoardUtils::MarkCannotAttack(char** markBoard, int playernum, const char** mainBoard, int rows, int cols)
 {
 	char cannotAttckChar = CannotAttck;
 
