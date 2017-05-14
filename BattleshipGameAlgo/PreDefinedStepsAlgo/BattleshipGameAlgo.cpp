@@ -48,7 +48,7 @@ void PreDefinedBattleshipGameAlgo::setBoard(int player, const char** board, int 
 	MainLogger.InitLogger(name);
 
 	m_board = GameBoardUtils::InitializeNewEmptyBoard(numRows, numCols);
-	GameBoardUtils::CloneBoardToPlayer(board, m_myPlayerNum, m_board,numRows,numCols);
+	GameBoardUtils::CloneBoardToPlayer(board, m_myPlayerNum, m_board,numRows,numCols,true);
 }
 
 /*

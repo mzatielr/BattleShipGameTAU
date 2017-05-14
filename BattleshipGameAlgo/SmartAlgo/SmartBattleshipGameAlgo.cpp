@@ -275,7 +275,7 @@ void SmartBattleshipGameAlgo::setBoard(int player, const char** board, int numRo
 	GameBoardUtils::InitBoard(m_cannotAttackBoard, numRows, numCols, CanAttck);
 	
 	m_board = GameBoardUtils::InitializeNewEmptyBoard(numRows,numCols);
-	GameBoardUtils::CloneBoardToPlayer(board, m_myPlayerNum, m_board, numRows, numCols);
+	GameBoardUtils::CloneBoardToPlayer(board, m_myPlayerNum, m_board, numRows, numCols,true);
 
 	//prepering a matrix to know where not to attack
 	GameBoardUtils::MarkCannotAttack(m_cannotAttackBoard, m_myPlayerNum, board, numRows, numCols);
