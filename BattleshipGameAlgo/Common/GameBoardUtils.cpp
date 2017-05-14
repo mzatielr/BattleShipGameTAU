@@ -268,7 +268,18 @@ void GameBoardUtils::InitBoard(char** board, int rows, int cols, char InitChar =
 	}
 }
 
-bool GameBoardUtils::IsPlayerIdChar(int playerID, char current) {
+bool GameBoardUtils::IsPlayerIdChar(int playerID, char current, bool CopyAllChars = false){
+	if(CopyAllChars)
+	{
+		return current == RubberBoatA ||
+			current == RocketShipA ||
+			current == SubmarineA ||
+			current == DestroyerA ||
+			current == RubberBoatB ||
+			current == RocketShipB ||
+			current == SubmarineB ||
+			current == DestroyerB;
+	}
 	if (playerID == PlayerAID)
 	{
 		return current == RubberBoatA ||
@@ -376,14 +387,21 @@ void GameBoardUtils::PrintBoard(ostream& stream, char** board, int rows, int col
 	}
 }
 
-void GameBoardUtils::CloneBoardToPlayer(const char** full_board, int playerID, char** player_board, int rows, int cols) {
+void GameBoardUtils::CloneBoardToPlayer(const char** full_board, int playerID, char** player_board, int rows, int cols,bool CopyAllChars = false) {
 	InitBoard(player_board, rows, cols);
 
 	for (size_t i = 0; i < rows; i++)
 	{
 		for (size_t j = 0; j < cols; j++)
 		{
-			player_board[i][j] = IsPlayerIdChar(playerID, full_board[i][j]) ? full_board[i][j] : player_board[i][j];
+			if(playerID == 0)
+			{
+				player_board[i][j] = IsPlayerIdChar(playerID, full_board[i][j],CopyAllChars) ? tolower(full_board[i][j]) : player_board[i][j];
+			}else
+			{
+				player_board[i][j] = IsPlayerIdChar(playerID, full_board[i][j], CopyAllChars) ? toupper(full_board[i][j]) : player_board[i][j];
+			}
+
 		}
 	}
 }
