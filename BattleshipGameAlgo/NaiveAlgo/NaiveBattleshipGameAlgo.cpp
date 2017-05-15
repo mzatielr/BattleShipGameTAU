@@ -4,6 +4,8 @@
 #include <utility>
 #include "GameBoardUtils.h"
 
+Logger MainLogger;
+
 /*
  * \brief Find next cell to attck 
  * \return (-1,-1) in case of EOF. (-2, -2) in case of any failure - should return values between 1-10 and not 0-9 (EX2 specification)
@@ -60,6 +62,8 @@ this function is called at startup to update each players board game
 */
 void NaiveBattleshipGameAlgo::setBoard(int player, const char** board, int numRows, int numCols)
 {
+	MainLogger.InitLogger("NaiveAlgo.log");
+
 	m_NumCol = numCols;
 	m_NumRow = numRows;
 	m_PlayerNum = player;
@@ -92,6 +96,7 @@ void NaiveBattleshipGameAlgo::notifyOnAttackResult(int player, int row, int col,
 NaiveBattleshipGameAlgo::~NaiveBattleshipGameAlgo()
 {
 	GameBoardUtils::DeleteBoard(m_CannotAttackBoard,m_NumRow);
+	MainLogger.LoggerDispose();
 }
 
 // Init Algorithm - Do nothing

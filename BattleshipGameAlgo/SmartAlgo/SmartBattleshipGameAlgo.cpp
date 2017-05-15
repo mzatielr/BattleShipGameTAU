@@ -3,6 +3,8 @@
 #include "Contants.h"
 #include <cassert>
 
+Logger MainLogger;
+
 pair<int, int> SmartBattleshipGameAlgo::attack()
 {
 	if (m_mode == AttackMode::RandomMode)
@@ -266,6 +268,7 @@ this function is called at startup to update each players board game
 */
 void SmartBattleshipGameAlgo::setBoard(int player, const char** board, int numRows, int numCols)
 {
+	MainLogger.InitLogger("SmartAlgo.log");
 	m_NumRow = numRows;
 	m_NumCol = numCols;
 	m_myPlayerNum = player;
@@ -320,6 +323,7 @@ SmartBattleshipGameAlgo::~SmartBattleshipGameAlgo()
 {
 	GameBoardUtils::DeleteBoard(m_board,m_NumRow);
 	GameBoardUtils::DeleteBoard(m_cannotAttackBoard,m_NumRow);
+	MainLogger.LoggerDispose();
 }
 
 // Don't do  nothing.

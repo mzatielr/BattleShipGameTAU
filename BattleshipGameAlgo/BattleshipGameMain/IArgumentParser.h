@@ -1,5 +1,4 @@
 #pragma once
-//#include "../Common/Bonus.h"
 #include "Bonus.h"
 
 using namespace std;

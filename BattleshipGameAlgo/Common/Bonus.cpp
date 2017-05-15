@@ -1,6 +1,6 @@
 #include "Bonus.h"
 #include <thread>
-#include "../Common/GameBoardUtils.h"
+#include "GameBoardUtils.h"
 
 Logger BonusLogger;
 

@@ -1,7 +1,7 @@
 #include "GameManager.h"
-#include "../Common/IFileDirectoryUtils.h"
-#include "../Common/Contants.h"
-#include "../Common/GameBoardUtils.h"
+#include "IFileDirectoryUtils.h"
+#include "Contants.h"
+#include "GameBoardUtils.h"
 #include "ShipDetailsBoard.h"
 
 GameManager::GameManager(Configuration& config): config(config)
