@@ -1,6 +1,6 @@
 #include "SmartBattleshipGameAlgo.h"
-#include "../Common/GameBoardUtils.h"
-#include "../Common/Contants.h"
+#include "GameBoardUtils.h"
+#include "Contants.h"
 #include <cassert>
 
 pair<int, int> SmartBattleshipGameAlgo::attack()

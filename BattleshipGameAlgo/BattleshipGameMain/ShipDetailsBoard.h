@@ -1,5 +1,5 @@
 #pragma once
-#include "../Common/GameBoardUtils.h"
+#include "GameBoardUtils.h"
 #include "IBattleshipGameAlgo.h"
 
 enum class Direction { Right, Left, Up, Down, All };

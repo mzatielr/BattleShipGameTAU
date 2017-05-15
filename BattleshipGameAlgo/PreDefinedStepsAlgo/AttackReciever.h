@@ -2,7 +2,11 @@
 
 #include <fstream>
 #include <queue>
+#include "IOLib.h"
+
 using namespace std;
+
+extern Logger MainLogger;
 
 /*
 * a utility class for handeling all attack functionalities

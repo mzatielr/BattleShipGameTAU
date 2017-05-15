@@ -561,7 +561,7 @@ void GameBoardUtils::ChangeFontSize()
 
 	if (GetCurrentConsoleFontEx(hStdout, FALSE, &orig))
 	{
-		//AppLogger.logFile << "Got\n"; //TODO: restore all instances here of applogger
+		//AppLogger.logFile << "Got\n"; 
 	}
 	else
 	{

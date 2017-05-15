@@ -1,10 +1,8 @@
 #include "AttackReciever.h"
-#include <iostream>
 #include <fstream>
 #include <string>
 #include <algorithm>
-#include "../Common/Contants.h"
-#include "../BattleshipGameMain/DllAlgo.h"
+#include "Contants.h"
 
 using namespace std;
 

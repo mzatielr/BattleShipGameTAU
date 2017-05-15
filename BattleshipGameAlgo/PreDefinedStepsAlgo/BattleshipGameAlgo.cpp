@@ -3,7 +3,7 @@
 
 #include "BattleshipGameAlgo.h"
 #include <utility>
-#include "../Common/GameBoardUtils.h"
+#include "GameBoardUtils.h"
 #include "AttackReciever.h"
 #include "AttackFileUtilis.h"
 

@@ -1,8 +1,8 @@
-#include "../Common/GameBoardUtils.h"
-#include "../Common/Bonus.h"
+#include "GameBoardUtils.h"
+#include "Bonus.h"
 #include <vector>
 #include "IBattleshipGameAlgo.h"
-#include "../Common/IFileDirectoryUtils.h"
+#include "IFileDirectoryUtils.h"
 #include "IArgumentParser.h"
 #include "GameManager.h"
 

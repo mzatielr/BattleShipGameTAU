@@ -1,5 +1,5 @@
 #include "AttackFileUtilis.h"
-#include "../Common/IFileDirectoryUtils.h"
+#include "IFileDirectoryUtils.h"
 
 string AttackFileUtils::GetAttackFile(const string & path, int playerID)
 {

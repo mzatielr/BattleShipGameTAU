@@ -2,7 +2,7 @@
 
 #include "NaiveBattleshipGameAlgo.h"
 #include <utility>
-#include "../Common/GameBoardUtils.h"
+#include "GameBoardUtils.h"
 
 /*
  * \brief Find next cell to attck 
