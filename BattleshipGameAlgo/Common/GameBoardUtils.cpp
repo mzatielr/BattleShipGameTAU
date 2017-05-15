@@ -268,7 +268,7 @@ void GameBoardUtils::InitBoard(char** board, int rows, int cols, char InitChar =
 	}
 }
 
-bool GameBoardUtils::IsPlayerIdChar(int playerID, char current, bool CopyAllChars = false){
+bool GameBoardUtils::IsPlayerIdChar(int playerID, char current, bool CopyAllChars){
 	if(CopyAllChars)
 	{
 		return current == RubberBoatA ||
@@ -387,7 +387,7 @@ void GameBoardUtils::PrintBoard(ostream& stream, char** board, int rows, int col
 	}
 }
 
-void GameBoardUtils::CloneBoardToPlayer(const char** full_board, int playerID, char** player_board, int rows, int cols,bool CopyAllChars = false) {
+void GameBoardUtils::CloneBoardToPlayer(const char** full_board, int playerID, char** player_board, int rows, int cols,bool CopyAllChars) {
 	InitBoard(player_board, rows, cols);
 
 	for (size_t i = 0; i < rows; i++)
