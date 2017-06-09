@@ -394,14 +394,7 @@ void GameBoardUtils::CloneBoardToPlayer(const char** full_board, int playerID, c
 	{
 		for (size_t j = 0; j < cols; j++)
 		{
-			if(playerID == 0)
-			{
-				player_board[i][j] = IsPlayerIdChar(playerID, full_board[i][j],CopyAllChars) ? tolower(full_board[i][j]) : player_board[i][j];
-			}else
-			{
-				player_board[i][j] = IsPlayerIdChar(playerID, full_board[i][j], CopyAllChars) ? toupper(full_board[i][j]) : player_board[i][j];
-			}
-
+			player_board[i][j] = IsPlayerIdChar(playerID, full_board[i][j]) ? full_board[i][j] : player_board[i][j];
 		}
 	}
 }
